@@ -21,14 +21,15 @@ forStmt : 'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock ;
 assStmt : var '=' expr ;
 var : Idf ('[' expr ']')? ('.' Idf)? ;
 
-expr : orExpr; // (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
+expr : orExpr; 
+//Split expr
 atomExpr: Number | var ('touches' var)? | '(' expr ')';
-unExpr	: ('!'|'-') atomExpr; //'-' expr | '!' expr | '(' expr ')';
+unExpr	: ('!'|'-')? atomExpr; 
 multExpr:unExpr (('*'|'/') unExpr)*;
 addExpr	:multExpr (('-'|'+') multExpr)*;
 andExpr	:relExpr ('&&' relExpr)*;
 relExpr	:addExpr (('<'|'<='|'==') addExpr)*;
 orExpr	:andExpr ('||' andExpr)*;
-//Op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
+
 Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
