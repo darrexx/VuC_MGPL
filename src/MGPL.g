@@ -20,7 +20,15 @@ ifStmt : 'if' '(' expr ')' stmtBlock ( 'else' stmtBlock )? ;
 forStmt : 'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock ;
 assStmt : var '=' expr ;
 var : Idf ('[' expr ']')? ('.' Idf)? ;
-expr : (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
-Op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
+
+expr : orExpr; // (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
+atomExpr: Number | var | var 'touches' var | '(' expr ')';
+unExpr	: ('!'|'-') atomExpr; //'-' expr | '!' expr | '(' expr ')';
+multExpr:unExpr (('*'|'/') unExpr)*;
+addExpr	:multExpr (('-'|'+') multExpr)*;
+andExpr	:relExpr ('&&' relExpr)*;
+relExpr	:addExpr (('<'|'<='|'==') addExpr)*;
+orExpr	:andExpr ('||' andExpr)*;
+//Op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
 Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
