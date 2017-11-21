@@ -4,7 +4,7 @@ options { backtrack = false }
 
 prog : 'game' idf '(' attrAssList ? ')' decl* stmtBlock block* ;
 decl : varDecl ';' | objDecl ';' ;
-varDecl : 'int' idf init ? | 'int' idf [ number ] ;
+varDecl : 'int' idf init ? | 'int' idf '[' number ']' ;
 init : '=' expr ;
 objDecl : objType idf '(' attrAssList ? ')' | objType idf '[' number ']';
 objType : 'rectangle' | 'triangle' | 'circle' ;
