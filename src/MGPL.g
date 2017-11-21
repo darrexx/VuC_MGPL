@@ -22,3 +22,6 @@ assStmt : var '=' expr ;
 var : idf | idf '[' expr ']' | idf '.' idf | idf '[' expr ']' '.' idf ;
 expr : number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')' | expr op expr ;
 op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
+idf : ( 'a'..'z' | 'A'..'Z')
+( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+number	: ('0'..'9')+;
