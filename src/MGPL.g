@@ -1,22 +1,22 @@
-parser grammar MGLP;
+grammar MGPL;
 
-Prog ::= game Idf ( AttrAssList ? ) Decl* StmtBlock Block*
-Decl ::= VarDecl ; | ObjDecl ;
-VarDecl ::= int Idf Init ? | int Idf [ Number ]
-Init ::= = Expr
-ObjDecl ::= ObjType Idf ( AttrAssList ? ) | ObjType Idf [ Number ]
-ObjType ::= rectangle | triangle | circle
-AttrAssList ::= AttrAss , AttrAssList | AttrAss
-AttrAss ::= Idf = Expr
-Block ::= AnimBlock | EventBlock
-AnimBlock ::= animation Idf ( ObjType Idf ) StmtBlock
-EventBlock ::= on KeyStroke StmtBlock
-KeyStroke ::= space | leftarrow | rightarrow | uparrow | downarrow
-StmtBlock ::= { Stmt* }
-Stmt ::= IfStmt | ForStmt | AssStmt ;
-IfStmt ::= if ( Expr ) StmtBlock ( else StmtBlock )?
-ForStmt ::= for ( AssStmt ; Expr ; AssStmt ) StmtBlock
-AssStmt ::= Var = Expr
-Var ::= Idf | Idf [ Expr ] | Idf . Idf | Idf [ Expr ] . Idf
-Expr ::= Number | Var | Var touches Var | - Expr | ! Expr | ( Expr ) | Expr Op Expr |
-Op ::= || | && | == | < | <= | + | - | * | /
+prog : game idf ( attrAssList ? ) decl* stmtBlock block*
+decl : varDecl ; | objDecl ;
+varDecl : int idf init ? | int idf [ number ]
+init : = expr
+objDecl : objType idf ( attrAssList ? ) | objType idf [ number ]
+objType : rectangle | triangle | circle
+attrAssList : attrAss , attrAssList | attrAss
+attrAss : idf = expr
+block : animBlock | eventBlock
+animBlock : animation idf ( objType idf ) stmtBlock
+eventBlock : on keyStroke stmtBlock
+keyStroke : space | leftarrow | rightarrow | uparrow | downarrow
+stmtBlock : { stmt* }
+stmt : ifStmt | forStmt | assStmt ;
+ifStmt : if ( expr ) stmtBlock ( else stmtBlock )?
+forStmt : for ( assStmt ; expr ; assStmt ) stmtBlock
+assStmt : var = expr
+var : idf | idf [ Expr ] | idf . idf | idf [ Expr ] . idf
+expr : number | var | var touches var | - expr | ! expr | ( expr ) | expr op expr |
+op : || | && | == | < | <= | + | - | * | /
