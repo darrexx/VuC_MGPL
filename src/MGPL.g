@@ -8,7 +8,7 @@ varDecl : 'int' Idf init ? | 'int' Idf '[' Number ']' ;
 init : '=' expr ;
 objDecl : ObjType Idf '(' attrAssList ? ')' | ObjType Idf '[' Number ']';
 ObjType : 'rectangle' | 'triangle' | 'circle' ;
-attrAssList : attrAss ',' attrAssList | attrAss ;
+attrAssList : attrAss (',' attrAssList)?;
 attrAss : Idf '=' expr ;
 block : animBlock | eventBlock ;
 animBlock : 'animation' Idf '(' ObjType Idf ')' stmtBlock ;
@@ -22,7 +22,7 @@ assStmt : var '=' expr ;
 var : Idf ('[' expr ']')? ('.' Idf)? ;
 
 expr : orExpr; // (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
-atomExpr: Number | var | var 'touches' var | '(' expr ')';
+atomExpr: Number | var ('touches' var)? | '(' expr ')';
 unExpr	: ('!'|'-') atomExpr; //'-' expr | '!' expr | '(' expr ')';
 multExpr:unExpr (('*'|'/') unExpr)*;
 addExpr	:multExpr (('-'|'+') multExpr)*;
