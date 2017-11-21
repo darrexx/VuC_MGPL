@@ -15,7 +15,7 @@ animBlock : 'animation' Idf '(' ObjType Idf ')' stmtBlock ;
 eventBlock : 'on' KeyStroke stmtBlock ;
 KeyStroke : 'space' | 'leftarrow' | 'rightarrow' | 'uparrow' | 'downarrow' ;
 stmtBlock : '{' stmt* '}' ;
-stmt : ifStmt | forStmt | assStmt ';' ;
+stmt : (ifStmt | forStmt | assStmt ';') (Comment)?;
 ifStmt : 'if' '(' expr ')' stmtBlock ( 'else' stmtBlock )? ;
 forStmt : 'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock ;
 assStmt : var '=' expr ;
@@ -33,3 +33,6 @@ orExpr	:andExpr ('||' andExpr)*;
 
 Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
+
+Comment	:'//' ~('\r'|'\n')*{$channel=HIDDEN;};
+
