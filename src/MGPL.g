@@ -1,6 +1,6 @@
 grammar MGPL;
 
-options { backtrack = false }
+options {backtrack = false;}
 
 prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block* ;
 decl : varDecl ';' | objDecl ';' ;
@@ -22,6 +22,5 @@ assStmt : var '=' expr ;
 var : Idf | Idf '[' expr ']' | Idf '.' Idf | Idf '[' expr ']' '.' Idf ;
 expr : (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
 Op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
-Idf : ( 'a'..'z' | 'A'..'Z')
-( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
+Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
