@@ -19,7 +19,7 @@ stmt : ifStmt | forStmt | assStmt ';' ;
 ifStmt : 'if' '(' expr ')' stmtBlock ( 'else' stmtBlock )? ;
 forStmt : 'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock ;
 assStmt : var '=' expr ;
-var : Idf | Idf '[' expr ']' | Idf '.' Idf | Idf '[' expr ']' '.' Idf ;
+var : Idf ('[' expr ']')? ('.' Idf)? ;
 expr : (Number | var | var 'touches' var | '-' expr | '!' expr | '(' expr ')') (Op expr)* ;
 Op : '||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/' ;
 Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
