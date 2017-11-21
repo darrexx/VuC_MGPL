@@ -1,5 +1,7 @@
 grammar MGPL;
 
+options { backtrack = false }
+
 prog : 'game' idf '(' attrAssList ? ')' decl* stmtBlock block* ;
 decl : varDecl ';' | objDecl ';' ;
 varDecl : 'int' idf init ? | 'int' idf [ number ] ;
