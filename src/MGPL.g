@@ -8,7 +8,7 @@ varDecl : 'int' Idf init ? | 'int' Idf '[' Number ']' ;
 init : '=' expr ;
 objDecl : ObjType Idf '(' attrAssList ? ')' | ObjType Idf '[' Number ']';
 ObjType : 'rectangle' | 'triangle' | 'circle' ;
-attrAssList : attrAss , attrAssList | attrAss ;
+attrAssList : attrAss ',' attrAssList | attrAss ;
 attrAss : Idf '=' expr ;
 block : animBlock | eventBlock ;
 animBlock : 'animation' Idf '(' ObjType Idf ')' stmtBlock ;
