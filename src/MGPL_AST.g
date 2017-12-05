@@ -35,4 +35,4 @@ Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
 
 Comment	:'//' ~('\r'|'\n')*{$channel=HIDDEN;};
-
+WS	:('\n' | '\r' | ' ' | '\u000C' | '\t') {$channel=HIDDEN;};
