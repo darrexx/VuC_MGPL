@@ -2,7 +2,11 @@ grammar MGPL_AST;
 
 options {backtrack = false;}
 
-prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block* ;
+tokens {
+GAME;
+}
+
+prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block*;
 decl : varDecl ';' | objDecl ';' ;
 varDecl : 'int' Idf init ? | 'int' Idf '[' Number ']' ;
 init : '=' expr ;
