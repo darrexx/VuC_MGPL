@@ -1,4 +1,4 @@
-grammar MGPL;
+grammar MGPL_AST;
 
 options {backtrack = false;}
 
