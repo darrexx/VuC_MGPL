@@ -1,15 +1,16 @@
 grammar MGPL_AST;
 
-options {backtrack = false;}
+options {backtrack = false; output=AST;}
 
 tokens {
 GAME;
+INIT;
 }
 
-prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block*;
+prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block* -> ^(GAME);
 decl : varDecl ';' | objDecl ';' ;
 varDecl : 'int' Idf init ? | 'int' Idf '[' Number ']' ;
-init : '=' expr ;
+init : '=' expr -> ^(INIT expr);
 objDecl : ObjType Idf '(' attrAssList ? ')' | ObjType Idf '[' Number ']';
 ObjType : 'rectangle' | 'triangle' | 'circle' ;
 attrAssList : attrAss (',' attrAssList)?;
