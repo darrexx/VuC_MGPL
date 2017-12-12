@@ -22,6 +22,8 @@ FOR_STATEMENT;
 LOOP_CONDITION;
 VARIABLE;
 TOUCHES;
+EXPRESSION;
+POSITION;
 }
 
 prog : 'game' Idf '(' attrAssList ? ')' decl* stmtBlock block* -> ^(GAME Idf attrAssList ^(DECLARATIONS decl*) stmtBlock block*);
@@ -42,17 +44,17 @@ stmt : (ifStmt | forStmt | assStmt ';'!);
 ifStmt : 'if' '(' expr ')' stmtBlock ( 'else' stmtBlock )? -> ^(IF_STATEMENT ^(CONDITION expr) stmtBlock ^(ELSE stmtBlock)?);
 forStmt : 'for' '(' assStmt ';' expr ';' assStmt ')' stmtBlock -> ^(FOR_STATEMENT ^(LOOP_CONDITION assStmt expr assStmt) stmtBlock);
 assStmt : var '=' expr -> ^(ASSIGNMENT var expr);
-var : Idf ('[' expr ']')? ('.' Idf)? -> ^(VARIABLE Idf expr? ^(Idf)?);
+var : Idf ('[' expr ']')? ('.' Idf)? -> ^(VARIABLE ^(Idf ^(POSITION expr)?) ^(Idf)?);
 
 expr : orExpr; 
 //Split expr
-atomExpr: Number | var ('touches' var)? -> ^(^TOUCHES | '('! expr ')'!;
-unExpr	: (^('!'|'-'))? atomExpr; 
-multExpr:unExpr (^('*'|'/') unExpr)*;
-addExpr	:multExpr (^('-'|'+') multExpr)*;
-andExpr	:relExpr (^'&&' relExpr)*;
-relExpr	:addExpr (^('<'|'<='|'==') addExpr)*;
-orExpr	:andExpr (^'||' andExpr)*;
+atomExpr: Number | var ('touches' var)? | '('! expr ')'!;
+unExpr	: (('!'|'-')^)? atomExpr;
+multExpr:unExpr (('*'|'/')^ unExpr)*;
+addExpr	:multExpr (('-'|'+')^ multExpr)*;
+andExpr	:relExpr ('&&'^ relExpr)*;
+relExpr	:addExpr (('<'|'<='|'==')^ addExpr)*;
+orExpr	:andExpr ('||'^ andExpr)*;
 
 Idf : ( 'a'..'z' | 'A'..'Z')( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 Number	: ('0'..'9')+;
