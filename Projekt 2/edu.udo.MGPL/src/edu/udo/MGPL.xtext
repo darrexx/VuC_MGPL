@@ -7,3 +7,85 @@ Model:
 	
 Greeting:
 	'Hello' name=ID '!';
+
+
+Prog:
+	'game' name=ID '(' aatrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
+;
+
+Decl:
+	VarDecl ';' | ObjDecl ';'
+;
+
+VarDecl:
+	'int' name=ID init=Init? | 'int' name=ID '[' value=INT ']'
+;
+
+Init: 
+	'=' Expr
+;
+
+ObjDecl: 
+	OBJTYPE name=ID '(' attrAssList=AttrAssList? ')' | OBJTYPE name=ID '[' value=INT ']'
+;
+
+terminal OBJTYPE: 
+	'rectangle' | 'triangle' | 'circle'
+;
+
+AttrAssList: 
+	AttrAss ',' attrAssList=AttrAssList | AttrAss
+;
+
+AttrAss:
+	name=ID '=' expr=Expr
+;
+
+Block: 
+	AnimBlock | EventBlock
+;
+
+AnimBlock: 
+	'animation' name=ID '(' OBJTYPE objName=ID ')' stmtBlock=StmtBlock 
+;
+
+EventBlock: 
+	'on' KEYSTROKE StmtBlock 
+;
+
+KEYSTROKE: 
+	'space' | 'leftarrow' | 'rightarrow' | 'uparrow' | 'downarrow'
+;
+
+StmtBlock: 
+	'{' stmt+=Stmt* '}'
+;
+
+Stmt:
+	IfStmt | ForStmt | AssStmt ';'
+;
+
+IfStmt: 
+	'if (' Expr ')' stmtBlockIf=StmtBlock ('else' stmtBlockElse=StmtBlock)?
+;
+
+ForStmt: 
+	'for (' loopAssSmt1=AssStmt ';' loopExpr=Expr ';' loopAssStmt2=AssStmt ')' stmtBlock=StmtBlock 
+;
+
+AssStmt:
+	Var '=' expr=Expr
+;
+
+Var: 
+	name = ID | name = ID '[' expr=Expr ']' | objectName=ID '.' memberName=ID | arrayName=ID '[' expr=Expr '] .' memberName=ID 
+;
+
+Expr: 
+	'Number' | Var | left=Var 'touches' right=Var | '-' Expr | '!' Expr | '(' Expr ')' | left=Expr OP right=Expr
+;
+
+
+terminal OP:
+	'||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/';
+
