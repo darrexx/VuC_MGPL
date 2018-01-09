@@ -2,13 +2,6 @@ grammar edu.udo.MGPL with org.eclipse.xtext.common.Terminals
 
 generate mGPL "http://www.udo.edu/MGPL"
 
-Model:
-	greetings+=Greeting*;
-	
-Greeting:
-	'Hello' name=ID '!';
-
-
 Prog:
 	'game' name=ID '(' aatrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
 ;
@@ -34,7 +27,7 @@ terminal OBJTYPE:
 ;
 
 AttrAssList: 
-	AttrAss ',' attrAssList=AttrAssList | AttrAss
+	AttrAss (',' attrAssList=AttrAssList)?
 ;
 
 AttrAss:
@@ -78,14 +71,37 @@ AssStmt:
 ;
 
 Var: 
-	name = ID | name = ID '[' expr=Expr ']' | objectName=ID '.' memberName=ID | arrayName=ID '[' expr=Expr '] .' memberName=ID 
+	name = ID ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=ID '.' memberName=ID  
 ;
 
 Expr: 
-	'Number' | Var | left=Var 'touches' right=Var | '-' Expr | '!' Expr | '(' Expr ')' | left=Expr OP right=Expr
+	OrExpr
 ;
 
+OrExpr:
+	expr+=AndExpr ( '||' expr+=AndExpr)*
+;
 
-terminal OP:
-	'||' | '&&' | '==' | '<' | '<=' | '+' | '-' | '*' | '/';
+AndExpr:
+	expr+=RelExpr ('&&' expr+=RelExpr)*
+;
 
+RelExpr:
+	expr += AddExpr (('<'|'<='|'==') expr+=AddExpr)*
+;
+
+AddExpr:
+	expr += MultExpr (('+'|'-') expr+=MultExpr)*
+;
+
+MultExpr:
+	expr+= UnExpr (('*'|'/') expr+=UnExpr)*
+;
+
+UnExpr: 
+	('!'|'-')? expr=AtomExpr
+;
+
+AtomExpr: 
+	value=INT| left=Var ('touches' right=Var)? | '(' expr=Expr ')' 
+;

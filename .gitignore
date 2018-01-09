@@ -4,3 +4,21 @@ src/output/
 Projekt 2/edu\.udo\.MGPL/src-gen/
 
 Projekt 2/edu\.udo\.MGPL/bin/
+
+runtime-EclipseXtext/
+
+Projekt 2/edu\.udo\.MGPL/xtend-gen/
+
+Projekt 2/edu\.udo\.MGPL\.ide/src-gen/
+
+Projekt 2/edu\.udo\.MGPL\.ide/xtend-gen/
+
+Projekt 2/edu\.udo\.MGPL\.tests/xtend-gen/
+
+Projekt 2/edu\.udo\.MGPL\.tests/src-gen/
+
+Projekt 2/edu\.udo\.MGPL\.ui/src-gen/
+
+Projekt 2/edu\.udo\.MGPL\.ui/xtend-gen/
+
+Projekt 2/edu\.udo\.MGPL\.ui\.tests/src-gen/

@@ -7,5 +7,23 @@ Bundle-SymbolicName: edu.udo.MGPL; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.xbase,
- org.eclipse.equinox.common;bundle-version="3.5.0"
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib,
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.xtend.lib,
+ org.eclipse.emf.common
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: edu.udo.generator,
+ edu.udo.mGPL.impl,
+ edu.udo.mGPL.util,
+ edu.udo,
+ edu.udo.mGPL,
+ edu.udo.parser.antlr,
+ edu.udo.services,
+ edu.udo.parser.antlr.internal,
+ edu.udo.validation,
+ edu.udo.scoping,
+ edu.udo.serializer
+Import-Package: org.apache.log4j
