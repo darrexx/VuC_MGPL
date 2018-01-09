@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mGPL" nsURI="http://www.udo.edu/MGPL" nsPrefix="mGPL">
   <eClassifiers xsi:type="ecore:EClass" name="Prog">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="aatrAssList" eType="#//AttrAssList"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="atrAssList" eType="#//AttrAssList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="decl" upperBound="-1" eType="#//Decl"
         containment="true"/>
@@ -29,7 +29,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="attrAssList" eType="#//AttrAssList"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//BOOLEAN"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Block"/>
   <eClassifiers xsi:type="ecore:EClass" name="AnimBlock" eSuperTypes="#//Block">
@@ -48,7 +49,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ForStmt" eSuperTypes="#//Stmt">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loopAssSmt1" eType="#//AssStmt"
         containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loopExpr" eType="#//Expr"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="loopExpr" eType="#//BOOLEAN"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loopAssStmt2" eType="#//AssStmt"
         containment="true"/>
@@ -57,45 +58,37 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AssStmt" eSuperTypes="#//Stmt"/>
   <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="#//AssStmt">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//BOOLEAN"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="memberName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="objectName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Expr" eSuperTypes="#//Init #//IfStmt">
+  <eClassifiers xsi:type="ecore:EClass" name="BOOLEAN" eSuperTypes="#//Init #//IfStmt">
     <eStructuralFeatures xsi:type="ecore:EReference" name="stmtBlockIf" eType="#//StmtBlock"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="stmtBlockElse" eType="#//StmtBlock"
         containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprOr" upperBound="-1"
+        eType="#//BOOLEAN" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprAnd" upperBound="-1"
+        eType="#//BOOLEAN" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprRel" upperBound="-1"
+        eType="#//NUMBER" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="OrExpr" eSuperTypes="#//Expr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//AndExpr"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AndExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//RelExpr"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="RelExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//AddExpr"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AddExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//MultExpr"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="MultExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" upperBound="-1" eType="#//UnExpr"
-        containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UnExpr">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//AtomExpr"
+  <eClassifiers xsi:type="ecore:EClass" name="NUMBER">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprAdd" upperBound="-1"
+        eType="#//NUMBER" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprMult" upperBound="-1"
+        eType="#//NUMBER" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="exprAtom" eType="#//AtomExpr"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AtomExpr">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Var" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Var" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expr" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//BOOLEAN"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

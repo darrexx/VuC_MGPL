@@ -8,7 +8,7 @@
       fileExtensions="mgpl" ecorePackage="MGPL.ecore#/">
     <genClasses ecoreClass="MGPL.ecore#//Prog">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Prog/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Prog/aatrAssList"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Prog/atrAssList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Prog/decl"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Prog/stmtBlock"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Prog/block"/>
@@ -55,27 +55,17 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Var/memberName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Var/objectName"/>
     </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//Expr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expr/stmtBlockIf"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expr/stmtBlockElse"/>
+    <genClasses ecoreClass="MGPL.ecore#//BOOLEAN">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//BOOLEAN/stmtBlockIf"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//BOOLEAN/stmtBlockElse"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//BOOLEAN/exprOr"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//BOOLEAN/exprAnd"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//BOOLEAN/exprRel"/>
     </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//OrExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//OrExpr/expr"/>
-    </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//AndExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AndExpr/expr"/>
-    </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//RelExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//RelExpr/expr"/>
-    </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//AddExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AddExpr/expr"/>
-    </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//MultExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//MultExpr/expr"/>
-    </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//UnExpr">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//UnExpr/expr"/>
+    <genClasses ecoreClass="MGPL.ecore#//NUMBER">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//NUMBER/exprAdd"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//NUMBER/exprMult"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//NUMBER/exprAtom"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//AtomExpr">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AtomExpr/value"/>

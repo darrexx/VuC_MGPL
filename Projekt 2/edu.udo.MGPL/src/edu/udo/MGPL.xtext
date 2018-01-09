@@ -3,7 +3,7 @@ grammar edu.udo.MGPL with org.eclipse.xtext.common.Terminals
 generate mGPL "http://www.udo.edu/MGPL"
 
 Prog:
-	'game' name=ID '(' aatrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
+	'game' name=ID '(' atrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
 ;
 
 Decl:
@@ -74,32 +74,32 @@ Var:
 	name = ID ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=ID '.' memberName=ID  
 ;
 
-Expr: 
+Expr returns BOOLEAN: 
 	OrExpr
 ;
 
-OrExpr:
-	expr+=AndExpr ( '||' expr+=AndExpr)*
+OrExpr returns BOOLEAN:
+	exprOr+=AndExpr ( '||' exprOr+=AndExpr)*
 ;
 
-AndExpr:
-	expr+=RelExpr ('&&' expr+=RelExpr)*
+AndExpr returns BOOLEAN:
+	exprAnd+=RelExpr ('&&' exprAnd+=RelExpr)*
 ;
 
-RelExpr:
-	expr += AddExpr (('<'|'<='|'==') expr+=AddExpr)*
+RelExpr returns BOOLEAN:
+	exprRel += AddExpr (('<'|'<='|'==') exprRel+=AddExpr)*
 ;
 
-AddExpr:
-	expr += MultExpr (('+'|'-') expr+=MultExpr)*
+AddExpr returns NUMBER:
+	exprAdd += MultExpr (('+'|'-') exprAdd+=MultExpr)*
 ;
 
-MultExpr:
-	expr+= UnExpr (('*'|'/') expr+=UnExpr)*
+MultExpr returns NUMBER:
+	exprMult+= UnExpr (('*'|'/') exprMult+=UnExpr)*
 ;
 
-UnExpr: 
-	('!'|'-')? expr=AtomExpr
+UnExpr returns NUMBER: 
+	('!'|'-')? exprAtom=AtomExpr
 ;
 
 AtomExpr: 
