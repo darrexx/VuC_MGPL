@@ -1,0 +1,9 @@
+grammar edu.udo.MGPL with org.eclipse.xtext.common.Terminals
+
+generate mGPL "http://www.udo.edu/MGPL"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
