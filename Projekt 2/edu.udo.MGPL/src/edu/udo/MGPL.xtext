@@ -3,23 +3,23 @@ grammar edu.udo.MGPL with org.eclipse.xtext.common.Terminals
 generate mGPL "http://www.udo.edu/MGPL"
 
 Prog:
-	'game' name=ID '(' atrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
+	{Programm} 'game' name=ID '(' attrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
 ;
 
-Decl:
+Decl returns Declaration:
 	VarDecl ';' | ObjDecl ';'
 ;
 
-VarDecl:
-	'int' name=ID init=Init? | 'int' name=ID '[' value=INT ']'
+VarDecl returns Declaration:
+	{IntDecl} 'int' name=ID init=Init? | {IntArrayDecl} 'int' name=ID '[' size=INT ']'
 ;
 
 Init: 
 	'=' Expr
 ;
 
-ObjDecl: 
-	OBJTYPE name=ID '(' attrAssList=AttrAssList? ')' | OBJTYPE name=ID '[' value=INT ']'
+ObjDecl returns Declaration: 
+	{ObjDecl} objtype=OBJTYPE name=ID '(' attrAssList=AttrAssList? ')' | {ObjArrayDecl} objtype=OBJTYPE name=ID '[' size=INT ']'
 ;
 
 terminal OBJTYPE: 
@@ -27,7 +27,7 @@ terminal OBJTYPE:
 ;
 
 AttrAssList: 
-	AttrAss (',' attrAssList=AttrAssList)?
+    {AttributeAssignments} Assignments+=AttrAss (',' Assignments+=AttrAss)*
 ;
 
 AttrAss:
@@ -39,19 +39,19 @@ Block:
 ;
 
 AnimBlock: 
-	'animation' name=ID '(' OBJTYPE objName=ID ')' stmtBlock=StmtBlock 
+	{Animation} 'animation' name=ID '(' OBJTYPE objName=ID ')' stmtBlock=StmtBlock 
 ;
 
 EventBlock: 
-	'on' KEYSTROKE StmtBlock 
+	{Event} 'on' keystroke=KEYSTROKE stmtBlock=StmtBlock 
 ;
 
-KEYSTROKE: 
+terminal KEYSTROKE: 
 	'space' | 'leftarrow' | 'rightarrow' | 'uparrow' | 'downarrow'
 ;
 
 StmtBlock: 
-	'{' stmt+=Stmt* '}'
+	{Statements} '{' stmt+=Stmt* '}'
 ;
 
 Stmt:
@@ -59,49 +59,50 @@ Stmt:
 ;
 
 IfStmt: 
-	'if (' Expr ')' stmtBlockIf=StmtBlock ('else' stmtBlockElse=StmtBlock)?
+	{IfStatement} 'if' '(' condition=Expr ')' stmtBlockIf=StmtBlock ('else' stmtBlockElse=StmtBlock)?
 ;
 
 ForStmt: 
-	'for (' loopAssSmt1=AssStmt ';' loopExpr=Expr ';' loopAssStmt2=AssStmt ')' stmtBlock=StmtBlock 
+	{ForStatement} 'for' '(' loopInitialization=AssStmt ';' loopCondition=Expr ';' loopIncrement=AssStmt ')' stmtBlock=StmtBlock 
 ;
 
 AssStmt:
-	Var '=' expr=Expr
+	{AssignmentStatement} var=Var '=' expr=Expr
 ;
 
 Var: 
 	name = ID ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=ID '.' memberName=ID  
 ;
 
-Expr returns BOOLEAN: 
+Expr returns Expression: 
 	OrExpr
 ;
 
-OrExpr returns BOOLEAN:
-	exprOr+=AndExpr ( '||' exprOr+=AndExpr)*
+OrExpr returns Expression:
+	AndExpr ({Expression.left=current} op='||' right=AndExpr)*
 ;
 
-AndExpr returns BOOLEAN:
-	exprAnd+=RelExpr ('&&' exprAnd+=RelExpr)*
+AndExpr returns Expression:
+	RelExpr ({Expression.left=current} op='&&' right=RelExpr)*
 ;
 
-RelExpr returns BOOLEAN:
-	exprRel += AddExpr (('<'|'<='|'==') exprRel+=AddExpr)*
+RelExpr returns Expression:
+	AddExpr ({Expression.left=current} op=('<'|'<='|'==') right=AddExpr)*
 ;
 
-AddExpr returns NUMBER:
-	exprAdd += MultExpr (('+'|'-') exprAdd+=MultExpr)*
+AddExpr returns Expression:
+	MultExpr ({Expression.left=current} op=('+'|'-') right=MultExpr)*
 ;
 
-MultExpr returns NUMBER:
-	exprMult+= UnExpr (('*'|'/') exprMult+=UnExpr)*
+MultExpr returns Expression:
+	UnExpr ({Expression.left=current} op=('*'|'/') right=UnExpr)*
 ;
 
-UnExpr returns NUMBER: 
-	('!'|'-')? exprAtom=AtomExpr
+UnExpr returns Expression: 
+	{Negation} op=('!'|'-') exprAtom=AtomExpr | AtomExpr
 ;
 
-AtomExpr: 
-	value=INT| left=Var ('touches' right=Var)? | '(' expr=Expr ')' 
+AtomExpr returns Expression: 
+	{IntLiteral} value=INT| {Touches} left=Var ('touches' right=Var)? | '(' Expr ')' 
 ;
+
