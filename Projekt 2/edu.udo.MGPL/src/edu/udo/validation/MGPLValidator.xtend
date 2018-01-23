@@ -3,12 +3,18 @@
  */
 package edu.udo.validation
 
+import edu.udo.mGPL.AttrAss
+import edu.udo.mGPL.AttributeAssignments
 import edu.udo.mGPL.Expression
 import edu.udo.mGPL.IntLiteral
-import edu.udo.mGPL.impl.ExpressionImpl
-import org.eclipse.xtext.validation.Check
-import edu.udo.mGPL.Prog
+import edu.udo.mGPL.MGPLPackage
+import edu.udo.mGPL.ObjDecl
 import edu.udo.mGPL.Programm
+import edu.udo.mGPL.Touches
+import java.util.HashSet
+import java.util.Set
+import org.eclipse.emf.common.util.EList
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 
@@ -16,6 +22,10 @@ import edu.udo.mGPL.Programm
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class MGPLValidator extends AbstractMGPLValidator {
+	
+	public static final val GAME_ATTRIBUTE_NAMES = #{"height", "width", "speed", "x", "y", "h", "w"};
+	public static final val CIRLCE_ATTRIBUTE_NAMES = #{"animation_block", "radius", "visible", "x", "y", "r"};
+	public static final val RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES = #{"animation_block", "height", "width", "visible", "x", "y","h", "w"};
 	
 //	public static val INVALID_NAME = 'invalidName'
 //
@@ -27,4 +37,58 @@ class MGPLValidator extends AbstractMGPLValidator {
 //					INVALID_NAME)
 //		}
 //	}
+
+	@Check
+	def checkExpressions(Expression expression){
+		switch expression{
+			Touches :  if(!(expression.left.name instanceof ObjDecl) || !(expression.right.name instanceof ObjDecl)){
+				error('Touches only supports graphical Objects', MGPLPackage.Literals.TOUCHES__OP)
+			}
+			IntLiteral : {}
+			default: {}
+		}
+	}
+	
+	@Check
+	def checkGameAttributes(Programm programm){
+		if(programm.attrAssList !== null){
+			val attributeAssignments = programm.attrAssList as AttributeAssignments;
+			val attributes = attributeAssignments.assignments;
+			if(!checkParameters(attributes, GAME_ATTRIBUTE_NAMES)){
+				error('Only specific Attributes are allowed', MGPLPackage.Literals.PROGRAMM__ATTR_ASS_LIST)
+			}
+		}
+	}
+	
+	@Check
+	def checkObjDeclAttributes(ObjDecl decl){
+		if(decl.attrAssList !== null){
+			val attributeAssignments = decl.attrAssList as AttributeAssignments;
+			val attributes = attributeAssignments.assignments;
+			if(decl.type == "circle"){
+				if(!checkParameters(attributes, CIRLCE_ATTRIBUTE_NAMES)){
+					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+				}
+			}
+			else{
+				if(!checkParameters(attributes, RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES)){
+					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+				}
+			}
+			
+		}
+	}
+	
+	def checkParameters(EList<AttrAss> parameterNames, Set<String> validStrings){
+		var Set<String> validNames = new HashSet(validStrings);
+		for(parameter : parameterNames){
+			if(!validNames.contains(parameter.name)){
+				return false;
+			}
+			validNames.remove(parameter.name);
+		}
+		return true;
+	}
+	
+	
 }
