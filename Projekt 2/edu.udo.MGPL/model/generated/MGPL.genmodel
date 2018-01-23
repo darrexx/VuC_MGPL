@@ -11,11 +11,15 @@
     <genClasses ecoreClass="MGPL.ecore#//Init"/>
     <genClasses ecoreClass="MGPL.ecore#//AttrAssList"/>
     <genClasses ecoreClass="MGPL.ecore#//AttrAss">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttrAss/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AttrAss/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttrAss/expr"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Block"/>
     <genClasses ecoreClass="MGPL.ecore#//AnimBlock"/>
+    <genClasses ecoreClass="MGPL.ecore#//AnimationParameter">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AnimationParameter/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AnimationParameter/name"/>
+    </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//EventBlock"/>
     <genClasses ecoreClass="MGPL.ecore#//StmtBlock"/>
     <genClasses ecoreClass="MGPL.ecore#//Stmt"/>
@@ -23,15 +27,10 @@
     <genClasses ecoreClass="MGPL.ecore#//ForStmt"/>
     <genClasses ecoreClass="MGPL.ecore#//Var">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/expr"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Var/memberName"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/objectName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/variable"/>
     </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//Expression">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expression/left"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Expression/op"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expression/right"/>
-    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//Expression"/>
+    <genClasses ecoreClass="MGPL.ecore#//Declarations"/>
     <genClasses ecoreClass="MGPL.ecore#//Programm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Programm/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Programm/attrAssList"/>
@@ -40,20 +39,22 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Programm/block"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//IntDecl">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntDecl/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntDecl/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//IntDecl/init"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//IntArrayDecl">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntArrayDecl/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntArrayDecl/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntArrayDecl/size"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//ObjDecl">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjDecl/objtype"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjDecl/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjDecl/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ObjDecl/attrAssList"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//ObjArrayDecl">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjArrayDecl/objtype"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjArrayDecl/type"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjArrayDecl/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjArrayDecl/size"/>
     </genClasses>
@@ -62,7 +63,7 @@
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Animation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Animation/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Animation/objName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Animation/param"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Animation/stmtBlock"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Event">
@@ -78,21 +79,57 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//IfStatement/stmtBlockElse"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//ForStatement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ForStatement/loopInitialization"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ForStatement/loopInit"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ForStatement/loopCondition"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ForStatement/loopIncrement"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ForStatement/stmtBlock"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//AssignmentStatement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MGPL.ecore#//AssignmentStatement/var"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AssignmentStatement/var"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AssignmentStatement/expr"/>
     </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//ArrayElementSelect">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//ArrayElementSelect/index"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//MemberSelect">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//MemberSelect/memberName"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//Or">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Or/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Or/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Or/right"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//And">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//And/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//And/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//And/right"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//Rel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Rel/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Rel/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Rel/right"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//Add">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Add/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Add/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Add/right"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//Mult">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Mult/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Mult/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Mult/right"/>
+    </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Negation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Negation/op"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Negation/exprAtom"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//IntLiteral">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//IntLiteral/value"/>
     </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//Touches"/>
+    <genClasses ecoreClass="MGPL.ecore#//Touches">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Touches/left"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Touches/op"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Touches/right"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

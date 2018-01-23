@@ -27,21 +27,4 @@ class MGPLValidator extends AbstractMGPLValidator {
 //					INVALID_NAME)
 //		}
 //	}
-
-	@Check
-	def expressionTypeCheck(Expression expression){
-		switch expression.op{
-			case 'touches': 
-				{} // Check if Left & Right are of type ObjectDecl
-			case null: // No op defined
-				{}  
-			default: // Default Arithmetic operation 
-				{} //Check if left & right are numbers
-		}
-	}
-	
-	@Check
-	def checkProgramSpeed(Programm prog){
-		
-	}
 }

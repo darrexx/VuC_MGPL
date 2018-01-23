@@ -11,7 +11,7 @@ Decl returns Declaration:
 ;
 
 VarDecl returns Declaration:
-	{IntDecl} 'int' name=ID init=Init? | {IntArrayDecl} 'int' name=ID '[' size=INT ']'
+	{IntDecl} type='int' name=ID init=Init? | {IntArrayDecl} type='int' name=ID '[' size=INT ']'
 ;
 
 Init: 
@@ -19,7 +19,7 @@ Init:
 ;
 
 ObjDecl returns Declaration: 
-	{ObjDecl} objtype=OBJTYPE name=ID '(' attrAssList=AttrAssList? ')' | {ObjArrayDecl} objtype=OBJTYPE name=ID '[' size=INT ']'
+	{ObjDecl} type=OBJTYPE name=ID '(' attrAssList=AttrAssList? ')' | {ObjArrayDecl} type=OBJTYPE name=ID '[' size=INT ']'
 ;
 
 terminal OBJTYPE: 
@@ -39,7 +39,11 @@ Block:
 ;
 
 AnimBlock: 
-	{Animation} 'animation' name=ID '(' OBJTYPE objName=ID ')' stmtBlock=StmtBlock 
+	{Animation} 'animation' name=ID '(' param=AnimationParameter ')' stmtBlock=StmtBlock 
+;
+
+AnimationParameter:
+	type=OBJTYPE name=ID
 ;
 
 EventBlock: 
@@ -63,15 +67,19 @@ IfStmt:
 ;
 
 ForStmt: 
-	{ForStatement} 'for' '(' loopInitialization=AssStmt ';' loopCondition=Expr ';' loopIncrement=AssStmt ')' stmtBlock=StmtBlock 
+	{ForStatement} 'for' '(' loopInit=AssStmt ';' loopCondition=Expr ';' loopIncrement=AssStmt ')' stmtBlock=StmtBlock 
 ;
 
 AssStmt returns Declaration:
-	{AssignmentStatement} var=[Declaration] '=' expr=Expr
+	{AssignmentStatement} var=Var '=' expr=Expr
 ;
 
+
 Var: 
-	name = [Declaration] ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=[Declaration] '.' memberName=ID  
+	name = [Declarations]
+	 ({ArrayElementSelect.variable = current} '[' index=Expr ']')?
+	 ({MemberSelect.variable = current} '.' memberName=ID)? 
+	//( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=[Declaration] '.' memberName=ID  
 ;
 
 Expr returns Expression: 
@@ -79,23 +87,23 @@ Expr returns Expression:
 ;
 
 OrExpr returns Expression:
-	AndExpr ({Expression.left=current} op='||' right=AndExpr)*
+	AndExpr ({Or.left=current} op='||' right=AndExpr)*
 ;
 
 AndExpr returns Expression:
-	RelExpr ({Expression.left=current} op='&&' right=RelExpr)*
+	RelExpr ({And.left=current} op='&&' right=RelExpr)*
 ;
 
 RelExpr returns Expression:
-	AddExpr ({Expression.left=current} op=('<'|'<='|'==') right=AddExpr)*
+	AddExpr ({Rel.left=current} op=('<'|'<='|'==') right=AddExpr)*
 ;
 
 AddExpr returns Expression:
-	MultExpr ({Expression.left=current} op=('+'|'-') right=MultExpr)*
+	MultExpr ({Add.left=current} op=('+'|'-') right=MultExpr)*
 ;
 
 MultExpr returns Expression:
-	UnExpr ({Expression.left=current} op=('*'|'/') right=UnExpr)*
+	UnExpr ({Mult.left=current} op=('*'|'/') right=UnExpr)*
 ;
 
 UnExpr returns Expression: 
@@ -103,6 +111,9 @@ UnExpr returns Expression:
 ;
 
 AtomExpr returns Expression: 
-	{IntLiteral} value=INT| {Touches} left=Var (op='touches' right=Var)? | '(' Expr ')' 
+	{IntLiteral} value=INT| Var ({Touches.left = current} op='touches' right=Var)? | '(' Expr ')' 
 ;
 
+Declarations:
+	Prog | Decl | AnimationParameter | AnimBlock
+;
