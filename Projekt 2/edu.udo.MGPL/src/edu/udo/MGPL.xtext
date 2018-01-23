@@ -66,12 +66,12 @@ ForStmt:
 	{ForStatement} 'for' '(' loopInitialization=AssStmt ';' loopCondition=Expr ';' loopIncrement=AssStmt ')' stmtBlock=StmtBlock 
 ;
 
-AssStmt:
-	{AssignmentStatement} var=Var '=' expr=Expr
+AssStmt returns Declaration:
+	{AssignmentStatement} var=[Declaration] '=' expr=Expr
 ;
 
 Var: 
-	name = ID ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=ID '.' memberName=ID  
+	name = [Declaration] ( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=[Declaration] '.' memberName=ID  
 ;
 
 Expr returns Expression: 
@@ -103,6 +103,6 @@ UnExpr returns Expression:
 ;
 
 AtomExpr returns Expression: 
-	{IntLiteral} value=INT| {Touches} left=Var ('touches' right=Var)? | '(' Expr ')' 
+	{IntLiteral} value=INT| {Touches} left=Var (op='touches' right=Var)? | '(' Expr ')' 
 ;
 

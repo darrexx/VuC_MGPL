@@ -3,6 +3,12 @@
  */
 package edu.udo.validation
 
+import edu.udo.mGPL.Expression
+import edu.udo.mGPL.IntLiteral
+import edu.udo.mGPL.impl.ExpressionImpl
+import org.eclipse.xtext.validation.Check
+import edu.udo.mGPL.Prog
+import edu.udo.mGPL.Programm
 
 /**
  * This class contains custom validation rules. 
@@ -21,5 +27,21 @@ class MGPLValidator extends AbstractMGPLValidator {
 //					INVALID_NAME)
 //		}
 //	}
+
+	@Check
+	def expressionTypeCheck(Expression expression){
+		switch expression.op{
+			case 'touches': 
+				{} // Check if Left & Right are of type ObjectDecl
+			case null: // No op defined
+				{}  
+			default: // Default Arithmetic operation 
+				{} //Check if left & right are numbers
+		}
+	}
 	
+	@Check
+	def checkProgramSpeed(Programm prog){
+		
+	}
 }
