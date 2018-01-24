@@ -13,6 +13,7 @@ import edu.udo.mGPL.IntDecl
 import edu.udo.mGPL.IntArrayDecl
 import edu.udo.mGPL.ObjDecl
 import edu.udo.mGPL.AttrAssList
+import edu.udo.mGPL.Event
 
 /**
  * Generates code from your model files on save.
@@ -54,5 +55,15 @@ class MGPLGenerator extends AbstractGenerator {
 	'''
 	
 	def compile(AttrAssList list) '''
+	'''
+	
+	def compile(Event event)'''
+	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	    @Override
+	   	public void handle(KeyEvent event) {
+	   		//TODO Handle key press
+	   		}
+	   	}
+	   	}
 	'''
 }
