@@ -3,10 +3,16 @@
  */
 package edu.udo.generator
 
+import edu.udo.mGPL.Programm
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import edu.udo.mGPL.Declaration
+import edu.udo.mGPL.IntDecl
+import edu.udo.mGPL.IntArrayDecl
+import edu.udo.mGPL.ObjDecl
+import edu.udo.mGPL.AttrAssList
 
 /**
  * Generates code from your model files on save.
@@ -22,4 +28,31 @@ class MGPLGenerator extends AbstractGenerator {
 //				.map[name]
 //				.join(', '))
 	}
+	
+	def compile(Programm prog) '''
+	public class «prog.name.toFirstUpper» {
+		«FOR d:prog.decl»
+		«d.compile»
+		«ENDFOR»
+	}
+	'''
+	
+	def compile(Declaration decl) '''
+	
+	'''
+	
+	def compile(IntDecl decl) '''
+	public int «decl.name»«IF decl.init !== null» = «decl.init»«ENDIF»;
+	'''
+	
+	def compile(IntArrayDecl decl) '''
+	public int «decl.name»[«decl.size»];
+	'''
+	
+	def compile(ObjDecl decl) '''
+	public «decl.type» «decl.name»(«IF decl.attrAssList !== null»«decl.attrAssList.compile»«ENDIF»);
+	'''
+	
+	def compile(AttrAssList list) '''
+	'''
 }
