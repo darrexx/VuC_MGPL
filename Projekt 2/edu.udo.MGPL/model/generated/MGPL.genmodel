@@ -10,10 +10,7 @@
     <genClasses ecoreClass="MGPL.ecore#//Declaration"/>
     <genClasses ecoreClass="MGPL.ecore#//Init"/>
     <genClasses ecoreClass="MGPL.ecore#//AttrAssList"/>
-    <genClasses ecoreClass="MGPL.ecore#//AttrAss">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AttrAss/name"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttrAss/expr"/>
-    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//AttrAss"/>
     <genClasses ecoreClass="MGPL.ecore#//Block"/>
     <genClasses ecoreClass="MGPL.ecore#//AnimBlock"/>
     <genClasses ecoreClass="MGPL.ecore#//AnimationParameter">
@@ -59,7 +56,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//ObjArrayDecl/size"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//AttributeAssignments">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttributeAssignments/Assignments"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttributeAssignments/assignments"/>
+    </genClasses>
+    <genClasses ecoreClass="MGPL.ecore#//AttributeAssignment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//AttributeAssignment/name"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//AttributeAssignment/expr"/>
     </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Animation">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Animation/name"/>

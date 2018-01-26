@@ -38,57 +38,57 @@ class MGPLValidator extends AbstractMGPLValidator {
 //		}
 //	}
 
-	@Check
-	def checkExpressions(Expression expression){
-		switch expression{
-			Touches :  if(!(expression.left.name instanceof ObjDecl) || !(expression.right.name instanceof ObjDecl)){
-				error('Touches only supports graphical Objects', MGPLPackage.Literals.TOUCHES__OP)
-			}
-			IntLiteral : {}
-			default: {}
-		}
-	}
-	
-	@Check
-	def checkGameAttributes(Programm programm){
-		if(programm.attrAssList !== null){
-			val attributeAssignments = programm.attrAssList as AttributeAssignments;
-			val attributes = attributeAssignments.assignments;
-			if(!checkParameters(attributes, GAME_ATTRIBUTE_NAMES)){
-				error('Only specific Attributes are allowed', MGPLPackage.Literals.PROGRAMM__ATTR_ASS_LIST)
-			}
-		}
-	}
-	
-	@Check
-	def checkObjDeclAttributes(ObjDecl decl){
-		if(decl.attrAssList !== null){
-			val attributeAssignments = decl.attrAssList as AttributeAssignments;
-			val attributes = attributeAssignments.assignments;
-			if(decl.type == "circle"){
-				if(!checkParameters(attributes, CIRLCE_ATTRIBUTE_NAMES)){
-					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
-				}
-			}
-			else{
-				if(!checkParameters(attributes, RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES)){
-					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
-				}
-			}
-			
-		}
-	}
-	
-	def checkParameters(EList<AttrAss> parameterNames, Set<String> validStrings){
-		var Set<String> validNames = new HashSet(validStrings);
-		for(parameter : parameterNames){
-			if(!validNames.contains(parameter.name)){
-				return false;
-			}
-			validNames.remove(parameter.name);
-		}
-		return true;
-	}
-	
+//	@Check
+//	def checkExpressions(Expression expression){
+//		switch expression{
+//			Touches :  if(!(expression.left.name instanceof ObjDecl) || !(expression.right.name instanceof ObjDecl)){
+//				error('Touches only supports graphical Objects', MGPLPackage.Literals.TOUCHES__OP)
+//			}
+//			IntLiteral : {}
+//			default: {}
+//		}
+//	}
+//	
+//	@Check
+//	def checkGameAttributes(Programm programm){
+//		if(programm.attrAssList !== null){
+//			val attributeAssignments = programm.attrAssList as AttributeAssignments;
+//			val attributes = attributeAssignments.assignments;
+//			if(!checkParameters(attributes, GAME_ATTRIBUTE_NAMES)){
+//				error('Only specific Attributes are allowed', MGPLPackage.Literals.PROGRAMM__ATTR_ASS_LIST)
+//			}
+//		}
+//	}
+//	
+//	@Check
+//	def checkObjDeclAttributes(ObjDecl decl){
+//		if(decl.attrAssList !== null){
+//			val attributeAssignments = decl.attrAssList as AttributeAssignments;
+//			val attributes = attributeAssignments.assignments;
+//			if(decl.type == "circle"){
+//				if(!checkParameters(attributes, CIRLCE_ATTRIBUTE_NAMES)){
+//					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+//				}
+//			}
+//			else{
+//				if(!checkParameters(attributes, RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES)){
+//					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+//				}
+//			}
+//			
+//		}
+//	}
+//	
+//	def checkParameters(EList<AttrAss> parameterNames, Set<String> validStrings){
+//		var Set<String> validNames = new HashSet(validStrings);
+//		for(parameter : parameterNames){
+//			if(!validNames.contains(parameter.name)){
+//				return false;
+//			}
+//			validNames.remove(parameter.name);
+//		}
+//		return true;
+//	}
+//	
 	
 }

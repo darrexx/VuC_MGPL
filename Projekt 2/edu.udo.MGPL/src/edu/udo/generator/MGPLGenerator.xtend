@@ -14,6 +14,8 @@ import edu.udo.mGPL.IntArrayDecl
 import edu.udo.mGPL.ObjDecl
 import edu.udo.mGPL.AttrAssList
 import edu.udo.mGPL.Event
+import edu.udo.mGPL.*
+import edu.udo.mGPL.impl.AnimationParameterImpl
 
 /**
  * Generates code from your model files on save.
@@ -23,40 +25,121 @@ import edu.udo.mGPL.Event
 class MGPLGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(Greeting)
-//				.map[name]
-//				.join(', '))
+		//fsa.generateFile('mgpl_generated.java',compile(resource.allContents.toIterable.findFirst[typeof(Programm)])
+		for(e: resource.allContents.toIterable.filter(typeof(Programm)))
+		{
+			fsa.generateFile(e.name + ".java", e.compile())
+		}
 	}
 	
 	def compile(Programm prog) '''
 	public class «prog.name.toFirstUpper» {
+		//Declarations
 		«FOR d:prog.decl»
 		«d.compile»
 		«ENDFOR»
+		//Declarations end
+		
+		//Statements
+		«(prog.stmtBlock as Statements).compile»
+		//Statements end
+		
+		//Block
+		«FOR d:prog.block»
+		«d.compile»
+		«ENDFOR»
+		//Block end
 	}
 	'''
 	
 	def compile(Declaration decl) '''
-	
+	«IF decl instanceof IntDecl»
+	«compile(decl as IntDecl)»
+	«ENDIF»
+	«IF decl instanceof IntArrayDecl»
+	«compile(decl as IntArrayDecl)»
+	«ENDIF»
+	«IF decl instanceof ObjDecl»
+	«compile(decl as ObjDecl)»
+	«ENDIF»
+	«IF decl instanceof ObjArrayDecl»
+	«compile(decl as ObjArrayDecl)»
+	«ENDIF»
 	'''
 	
 	def compile(IntDecl decl) '''
-	public int «decl.name»«IF decl.init !== null» = «decl.init»«ENDIF»;
+	public int «decl.name»«IF decl.init !== null» = //TODO «decl.init.class»«ENDIF»;
 	'''
 	
 	def compile(IntArrayDecl decl) '''
-	public int «decl.name»[«decl.size»];
+	public «decl.type»[] «decl.name» = new «decl.type»[«decl.size»];
+	'''
+	
+	def compile(ObjArrayDecl decl) '''
+	public «decl.type.toFirstUpper»[] «decl.name» = new «decl.type.toFirstUpper»[«decl.size»];
 	'''
 	
 	def compile(ObjDecl decl) '''
-	public «decl.type» «decl.name»(«IF decl.attrAssList !== null»«decl.attrAssList.compile»«ENDIF»);
+	public «decl.type.toFirstUpper» «decl.name» = new «decl.type.toFirstUpper»();
+	«IF decl.attrAssList !== null»«(decl.attrAssList as AttributeAssignments).compile(decl.name)»«ENDIF»
+
 	'''
 	
-	def compile(AttrAssList list) '''
+	def compile(AttributeAssignments list, String objName) '''
+	«FOR a:list.assignments»
+	«(a as AttributeAssignment).compile(objName)»
+	«ENDFOR»'''
+	
+	def compile(AttributeAssignment ass, String objName)'''
+	«objName».set«ass.name.toFirstUpper»(«ass.expr.compile»);'''
+	
+	def compile(Block block)'''
+	«IF block instanceof Animation»
+	«compile(block as Animation)»
+	«ENDIF»
+	«IF block instanceof Event»
+	«compile(block as Event)»
+	«ENDIF»
 	'''
 	
+	
+	def compile(Statements stmts)'''
+	«FOR stmt:stmts.stmt»
+	«IF stmt instanceof IfStatement»
+	«compile(stmt as IfStatement)»
+	«ENDIF»
+	«IF stmt instanceof ForStatement»
+	«compile(stmt as ForStatement)»
+	«ENDIF»
+	«IF stmt instanceof AssignmentStatement»
+	«compile(stmt as AssignmentStatement)»
+	«ENDIF»
+	«ENDFOR»'''
+	
+	def compile(IfStatement stmt)'''
+	if(«(stmt.condition as Expression).compile»){
+		«(stmt.stmtBlockIf as Statements).compile»
+	}«IF stmt.stmtBlockElse != null» else {
+		«(stmt.stmtBlockElse as Statements).compile»
+	}«ENDIF»'''
+	
+	def compile(AssignmentStatement stmt)'''
+	«stmt.^var.compile» = «stmt.expr.compile»;'''
+	
+	def compile(ForStatement stmt)'''
+		for(«(stmt.loopInit as AssignmentStatement).compile» «(stmt.loopCondition as Expression).compile»; «(stmt.loopIncrement as AssignmentStatement).compile»){
+			«(stmt.stmtBlock as Statements).compile»
+		}'''
+	
+	def compile(Animation anim)'''
+	public void animation«anim.name.toFirstUpper»(«(anim.param as AnimationParameter).compile»){
+		«(anim.stmtBlock as Statements).compile»
+	}
+	'''
+	
+	def compile(AnimationParameter param)'''«param.type.toFirstUpper» «param.name»'''
+	
+	def compile(Expression e)'''_EXPR_'''
 	def compile(Event event)'''
 	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
 	    @Override
@@ -64,6 +147,6 @@ class MGPLGenerator extends AbstractGenerator {
 	   		//TODO Handle key press
 	   		}
 	   	}
-	   	}
+	   	};
 	'''
 }

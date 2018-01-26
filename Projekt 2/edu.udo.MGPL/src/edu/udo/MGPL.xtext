@@ -27,11 +27,11 @@ terminal OBJTYPE:
 ;
 
 AttrAssList: 
-    {AttributeAssignments} Assignments+=AttrAss (',' Assignments+=AttrAss)*
+    {AttributeAssignments} assignments+=AttrAss (',' assignments+=AttrAss)*
 ;
 
 AttrAss:
-	name=ID '=' expr=Expr
+	{AttributeAssignment} name=ID '=' expr=Expr
 ;
 
 Block: 
@@ -43,7 +43,7 @@ AnimBlock:
 ;
 
 AnimationParameter:
-	type=OBJTYPE name=ID
+	{AnimationParameter} type=OBJTYPE name=ID
 ;
 
 EventBlock: 

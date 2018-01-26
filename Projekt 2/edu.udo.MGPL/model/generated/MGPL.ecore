@@ -5,11 +5,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="Declaration" eSuperTypes="#//Stmt #//Declarations"/>
   <eClassifiers xsi:type="ecore:EClass" name="Init"/>
   <eClassifiers xsi:type="ecore:EClass" name="AttrAssList"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AttrAss">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
-        containment="true"/>
-  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttrAss"/>
   <eClassifiers xsi:type="ecore:EClass" name="Block"/>
   <eClassifiers xsi:type="ecore:EClass" name="AnimBlock" eSuperTypes="#//Block #//Declarations"/>
   <eClassifiers xsi:type="ecore:EClass" name="AnimationParameter" eSuperTypes="#//Declarations">
@@ -61,8 +57,13 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttributeAssignments" eSuperTypes="#//AttrAssList">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="Assignments" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
         eType="#//AttrAss" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AttributeAssignment" eSuperTypes="#//AttrAss">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Animation" eSuperTypes="#//AnimBlock">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
