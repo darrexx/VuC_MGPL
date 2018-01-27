@@ -3,7 +3,10 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mGPL" nsURI="http://www.udo.edu/MGPL" nsPrefix="mGPL">
   <eClassifiers xsi:type="ecore:EClass" name="Prog" eSuperTypes="#//Declarations"/>
   <eClassifiers xsi:type="ecore:EClass" name="Declaration" eSuperTypes="#//Stmt #//Declarations"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Init"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Init">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AttrAssList"/>
   <eClassifiers xsi:type="ecore:EClass" name="AttrAss"/>
   <eClassifiers xsi:type="ecore:EClass" name="Block"/>
@@ -17,12 +20,16 @@
   <eClassifiers xsi:type="ecore:EClass" name="Stmt"/>
   <eClassifiers xsi:type="ecore:EClass" name="IfStmt" eSuperTypes="#//Stmt"/>
   <eClassifiers xsi:type="ecore:EClass" name="ForStmt" eSuperTypes="#//Stmt"/>
-  <eClassifiers xsi:type="ecore:EClass" name="Var" eSuperTypes="#//Expression">
+  <eClassifiers xsi:type="ecore:EClass" name="Var">
     <eStructuralFeatures xsi:type="ecore:EReference" name="name" eType="#//Declarations"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="#//Var"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Expression" eSuperTypes="#//Init"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Expression">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="var" eType="#//Var" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expr" eType="#//Expression"
+        containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Declarations"/>
   <eClassifiers xsi:type="ecore:EClass" name="Programm" eSuperTypes="#//Prog">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -155,7 +162,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Touches" eSuperTypes="#//Expression">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Var" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="left" eType="#//Expression"
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="op" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="right" eType="#//Var" containment="true"/>
   </eClassifiers>

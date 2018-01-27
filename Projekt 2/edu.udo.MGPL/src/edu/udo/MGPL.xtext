@@ -15,7 +15,7 @@ VarDecl returns Declaration:
 ;
 
 Init: 
-	'=' Expr
+	'=' expr=Expr
 ;
 
 ObjDecl returns Declaration: 
@@ -111,7 +111,7 @@ UnExpr returns Expression:
 ;
 
 AtomExpr returns Expression: 
-	{IntLiteral} value=INT| Var ({Touches.left = current} op='touches' right=Var)? | '(' Expr ')' 
+	{IntLiteral} value=INT| var = Var ({Touches.left = current} op='touches' right=Var)? | '(' expr=Expr ')' 
 ;
 
 Declarations:

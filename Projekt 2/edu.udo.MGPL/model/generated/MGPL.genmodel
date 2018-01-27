@@ -8,7 +8,9 @@
       fileExtensions="mgpl" ecorePackage="MGPL.ecore#/">
     <genClasses ecoreClass="MGPL.ecore#//Prog"/>
     <genClasses ecoreClass="MGPL.ecore#//Declaration"/>
-    <genClasses ecoreClass="MGPL.ecore#//Init"/>
+    <genClasses ecoreClass="MGPL.ecore#//Init">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Init/expr"/>
+    </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//AttrAssList"/>
     <genClasses ecoreClass="MGPL.ecore#//AttrAss"/>
     <genClasses ecoreClass="MGPL.ecore#//Block"/>
@@ -26,7 +28,10 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/name"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Var/variable"/>
     </genClasses>
-    <genClasses ecoreClass="MGPL.ecore#//Expression"/>
+    <genClasses ecoreClass="MGPL.ecore#//Expression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expression/var"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MGPL.ecore#//Expression/expr"/>
+    </genClasses>
     <genClasses ecoreClass="MGPL.ecore#//Declarations"/>
     <genClasses ecoreClass="MGPL.ecore#//Programm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MGPL.ecore#//Programm/name"/>

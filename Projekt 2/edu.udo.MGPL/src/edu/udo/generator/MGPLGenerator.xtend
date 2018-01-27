@@ -68,7 +68,7 @@ class MGPLGenerator extends AbstractGenerator {
 	'''
 	
 	def compile(IntDecl decl) '''
-	public int «decl.name»«IF decl.init !== null» = //TODO «decl.init.class»«ENDIF»;
+	public int «decl.name»«IF decl.init !== null» = «decl.init.expr.compile»«ENDIF»;
 	'''
 	
 	def compile(IntArrayDecl decl) '''
@@ -119,7 +119,7 @@ class MGPLGenerator extends AbstractGenerator {
 	def compile(IfStatement stmt)'''
 	if(«(stmt.condition as Expression).compile»){
 		«(stmt.stmtBlockIf as Statements).compile»
-	}«IF stmt.stmtBlockElse != null» else {
+	}«IF stmt.stmtBlockElse !== null» else {
 		«(stmt.stmtBlockElse as Statements).compile»
 	}«ENDIF»'''
 	
@@ -139,14 +139,61 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(AnimationParameter param)'''«param.type.toFirstUpper» «param.name»'''
 	
-	def compile(Expression e)'''_EXPR_'''
+	def compile(Expression e){
+		switch e{ 
+			Or:  ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
+			And : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
+			Rel : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
+			Add : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
+			Mult : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
+			Negation : '''«e.op» «e.exprAtom.compile»'''
+			IntLiteral : '''«e.value»'''
+			Touches : '''touches''' //TODO bin ich mir gerade nicht sicher, was Touches in MGPL bedeutet
+			default: '''«IF e.expr !== null»( «e.expr» ) «ELSE» «e.^var.compile» «ENDIF»'''	
+		}
+	}
+	
 	def compile(Event event)'''
 	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
 	    @Override
 	   	public void handle(KeyEvent event) {
-	   		//TODO Handle key press
-	   		}
+	   		if(
 	   	}
-	   	};
+	   	)
+	};
 	'''
+	
+//	on rightarrow
+//{
+//    if (gun.x < Invaders.width - 50)
+//       { gun.x = gun.x + 5; } 
+//}
+//
+//
+//// input handler for space which fires the gun
+//
+//on space
+//{
+//    // find a bullet that isn't currently active
+//    for (i = 0; i < 5; i = i+1)
+//    {
+//        if (! bullets[i].visible)
+//        { bullets[i].visible = 1;
+//	    bullets[i].x = gun.x + gun.w/2;
+//	    bullets[i].y = gun.y + gun.h;
+//	    i = 6; // break out of the loop
+//        } 
+//    }
+//}
+//	
+	
+	def compile(Var ^var){
+		switch ^var{
+			Prog:'''«(^var as Programm).name»'''
+			IntDecl:'''«^var.name»'''
+			ObjDecl:'''«^var.name»'''
+			AnimationParameter:'''«(^var as AnimationParameter).name»'''
+			Animation:'''«(^var as Animation).name»'''
+		}
+	}
 }
