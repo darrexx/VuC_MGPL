@@ -31,6 +31,7 @@ class MGPLGenerator extends AbstractGenerator {
 			fsa.generateFile(e.name + ".java", e.compile())
 		}
 	}
+	// canvas.setFocusTraversable(true); muss gesetzt werden damit tastenanschläge entgegengenommen werden
 	
 	def compile(Programm prog) '''
 	public class «prog.name.toFirstUpper» {
@@ -45,9 +46,19 @@ class MGPLGenerator extends AbstractGenerator {
 		//Statements end
 		
 		//Block
-		«FOR d:prog.block»
-		«d.compile»
+		«FOR d:prog.block.filter[x | x instanceof Animation]»
+			«compile(d as Animation)»
 		«ENDFOR»
+		
+		canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				«FOR d:prog.block.filter[x | x instanceof Event]»
+					«compile(d as Event)»
+				«ENDFOR»
+			}
+		};
+		
 		//Block end
 	}
 	'''
@@ -92,15 +103,6 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(AttributeAssignment ass, String objName)'''
 	«objName».set«ass.name.toFirstUpper»(«ass.expr.compile»);'''
-	
-	def compile(Block block)'''
-	«IF block instanceof Animation»
-	«compile(block as Animation)»
-	«ENDIF»
-	«IF block instanceof Event»
-	«compile(block as Event)»
-	«ENDIF»
-	'''
 	
 	
 	def compile(Statements stmts)'''
@@ -154,13 +156,19 @@ class MGPLGenerator extends AbstractGenerator {
 	}
 	
 	def compile(Event event)'''
-	canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
-	    @Override
-	   	public void handle(KeyEvent event) {
-	   		if(
-	   	}
-	   	)
-	};
+	   		if( «IF event.keystroke == "rightarrow"»
+	   			keyEvent.getCode() == KeyCode.RIGHT ) {
+	   		«ELSEIF event.keystroke == "leftarrow"»
+	   			keyEvent.getCode() == KeyCode.LEFT ) {
+	   		«ELSEIF event.keystroke == "uparrow"»
+	   			keyEvent.getCode() == KeyCode.UP ) {
+	   		«ELSEIF event.keystroke == "downarrow"»
+	   			keyEvent.getCode() == KeyCode.DOWN ) {
+	   		«ELSE /*Space*/»
+	   			keyEvent.getCode() == KeyCode.SPACE ) {
+	   		«ENDIF»
+	   			«(event.stmtBlock as Statements).compile»
+	   		}
 	'''
 	
 //	on rightarrow
@@ -187,7 +195,7 @@ class MGPLGenerator extends AbstractGenerator {
 //}
 //	
 	
-	def compile(Var ^var){
+	def compile(Var ^var){ //Todo funktioniert irgendwie nicht
 		switch ^var{
 			Prog:'''«(^var as Programm).name»'''
 			IntDecl:'''«^var.name»'''
