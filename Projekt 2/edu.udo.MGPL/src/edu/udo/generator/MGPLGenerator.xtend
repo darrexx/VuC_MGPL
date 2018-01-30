@@ -54,6 +54,10 @@ class MGPLGenerator extends AbstractGenerator {
 	def compile(Programm prog) '''
 	import java.util.*;
 	//JavaFX
+	import javafx.scene.input.KeyEvent;
+	import javafx.animation.KeyFrame;
+	import javafx.scene.input.KeyCode;
+	import javafx.event.EventHandler;
 	import javafx.animation.Timeline;
 	import javafx.application.Application;
 	import javafx.scene.Scene;
@@ -139,7 +143,7 @@ class MGPLGenerator extends AbstractGenerator {
 		public void start(Stage stage){
 			Canvas canvas = new Canvas(width, height);
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run(gc)));
+			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run()));
 			tl.setCycleCount(Timeline.INDEFINITE);
 			canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				@Override
@@ -279,15 +283,15 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(Event event)'''
 	   		if( «IF event.keystroke == "rightarrow"»
-	   			keyEvent.getCode() == KeyCode.RIGHT ) {
+	   			event.getCode() == KeyCode.RIGHT ) {
 	   		«ELSEIF event.keystroke == "leftarrow"»
-	   			keyEvent.getCode() == KeyCode.LEFT ) {
+	   			event.getCode() == KeyCode.LEFT ) {
 	   		«ELSEIF event.keystroke == "uparrow"»
-	   			keyEvent.getCode() == KeyCode.UP ) {
+	   			event.getCode() == KeyCode.UP ) {
 	   		«ELSEIF event.keystroke == "downarrow"»
-	   			keyEvent.getCode() == KeyCode.DOWN ) {
+	   			event.getCode() == KeyCode.DOWN ) {
 	   		«ELSE /*Space*/»
-	   			keyEvent.getCode() == KeyCode.SPACE ) {
+	   			event.getCode() == KeyCode.SPACE ) {
 	   		«ENDIF»
 	   			«(event.stmtBlock as Statements).compile»
 	   		}
