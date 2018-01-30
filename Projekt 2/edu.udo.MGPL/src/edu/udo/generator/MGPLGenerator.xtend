@@ -75,21 +75,19 @@ class MGPLGenerator extends AbstractGenerator {
 				
 		public abstract class AnimatableObject {
 			public int x;
-			public int y; 
+			public int y;
 			public boolean visible;
 			public Animation animation_block;
+			public int height;
+			public int width;
+			public int radius;
 			public abstract Shape toShape();
 		}
 		public class Circle extends AnimatableObject{
-			public int radius;
 		}
 		public class Rectangle extends AnimatableObject{
-			public int height;
-			public int width;
 		}
 		public class Triangle extends AnimatableObject{
-			public int height;
-			public int width;
 		}
 		//List of animatable Objects
 		List<Circle> circles = new ArrayList<Circle>();
@@ -234,13 +232,11 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(Animation anim)'''
 	private class «anim.name.toFirstUpper» extends Animation {
-		public void animate(«(anim.param as AnimationParameter).compile»){
+		public void animate(AnimatableObject «(anim.param as AnimationParameter).name»){
 			«(anim.stmtBlock as Statements).compile»
 		}
 	}
 	'''
-	
-	def compile(AnimationParameter param)'''«param.type.toFirstUpper» «param.name»'''
 	
 	def compile(Expression e){
 		switch e{ 
