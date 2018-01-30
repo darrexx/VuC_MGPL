@@ -62,6 +62,9 @@ class MGPLGenerator extends AbstractGenerator {
 	import javafx.scene.layout.StackPane;
 	import javafx.scene.paint.Color;
 	import javafx.stage.Stage;
+	import javafx.scene.shape.Circle;
+	import javafx.scene.shape.Rectangle;
+	import javafx.scene.shape.Polygon;
 	import javafx.scene.shape.Shape;
 	import javafx.util.Duration;
 	//End JavaFX
@@ -86,13 +89,13 @@ class MGPLGenerator extends AbstractGenerator {
 		}
 		public class Circle extends AnimatableObject{
 			public Shape toShape(){
-				retVal = new javafx.scene.shape.Circle(this.x, this.y, this.radius);
+				javafx.scene.shape.Circle retVal = new javafx.scene.shape.Circle(this.x, this.y, this.radius);
 				return retVal;
 			}
 		}
 		public class Rectangle extends AnimatableObject{
 			public Shape toShape(){
-				retVal = new javafx.scene.shape.Rectangle(this.x, this.y, this.width, this.height);
+				javafx.scene.shape.Rectangle retVal = new javafx.scene.shape.Rectangle(this.x, this.y, this.width, this.height);
 				return retVal; 
 			}
 		}
@@ -100,9 +103,9 @@ class MGPLGenerator extends AbstractGenerator {
 			public Shape toShape(){
 				Polygon polygon = new Polygon();
 				polygon.getPoints().addAll(new Double[]{
-					x, y,
-					x+width, y,
-					x+(width/2), y+height });
+					(double)x, (double)y,
+					(double)x+width, (double)y,
+					(double)x+(width/2), (double)y+height });
 				return polygon;
 			}
 		}
@@ -112,6 +115,9 @@ class MGPLGenerator extends AbstractGenerator {
 		List<Triangle> triangles = new ArrayList<Triangle>();	
 		
 		//Declarations
+		«FOR ass:(prog.attrAssList as AttributeAssignments).assignments»
+		public int «(ass as AttributeAssignment).name» = «(ass as AttributeAssignment).expr.compile»;
+		«ENDFOR»
 		«FOR d:prog.decl»
 		«d.compile»
 		«ENDFOR»
