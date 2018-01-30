@@ -223,6 +223,9 @@ class MGPLGenerator extends AbstractGenerator {
 	'''
 	
 	def compile(ObjArrayDecl decl){
+		initstmts.add('''for(int j=0; j<«decl.size»; j++){
+	«decl.name»[j] = new «decl.type.toFirstUpper»();
+}''')
 		initstmts.add('''Collections.addAll(«decl.type.toLowerCase»s, «decl.name»);''');
 		return '''
 			public «decl.type.toFirstUpper»[] «decl.name» = new «decl.type.toFirstUpper»[«decl.size»];
