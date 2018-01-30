@@ -3,19 +3,38 @@
  */
 package edu.udo.generator
 
+import edu.udo.mGPL.Add
+import edu.udo.mGPL.And
+import edu.udo.mGPL.Animation
+import edu.udo.mGPL.AnimationParameter
+import edu.udo.mGPL.ArrayElementSelect
+import edu.udo.mGPL.AssignmentStatement
+import edu.udo.mGPL.AttributeAssignment
+import edu.udo.mGPL.AttributeAssignments
+import edu.udo.mGPL.Declaration
+import edu.udo.mGPL.Event
+import edu.udo.mGPL.Expression
+import edu.udo.mGPL.ForStatement
+import edu.udo.mGPL.IfStatement
+import edu.udo.mGPL.IntArrayDecl
+import edu.udo.mGPL.IntDecl
+import edu.udo.mGPL.IntLiteral
+import edu.udo.mGPL.MemberSelect
+import edu.udo.mGPL.Mult
+import edu.udo.mGPL.Negation
+import edu.udo.mGPL.ObjArrayDecl
+import edu.udo.mGPL.ObjDecl
+import edu.udo.mGPL.Or
+import edu.udo.mGPL.Prog
 import edu.udo.mGPL.Programm
+import edu.udo.mGPL.Rel
+import edu.udo.mGPL.Statements
+import edu.udo.mGPL.Touches
+import edu.udo.mGPL.Var
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import edu.udo.mGPL.Declaration
-import edu.udo.mGPL.IntDecl
-import edu.udo.mGPL.IntArrayDecl
-import edu.udo.mGPL.ObjDecl
-import edu.udo.mGPL.AttrAssList
-import edu.udo.mGPL.Event
-import edu.udo.mGPL.*
-import edu.udo.mGPL.impl.AnimationParameterImpl
 
 /**
  * Generates code from your model files on save.
@@ -143,15 +162,15 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(Expression e){
 		switch e{ 
-			Or:  ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
-			And : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
-			Rel : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
-			Add : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
-			Mult : ''' «e.left.compile»«IF e.right !== null» «e.op» «e.right.compile» «ENDIF»'''
-			Negation : '''«e.op» «e.exprAtom.compile»'''
+			Or:  '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
+			And : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
+			Rel : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
+			Add : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
+			Mult : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
+			Negation : '''«e.op»«e.exprAtom.compile»'''
 			IntLiteral : '''«e.value»'''
 			Touches : '''touches''' //TODO bin ich mir gerade nicht sicher, was Touches in MGPL bedeutet
-			default: '''«IF e.expr !== null»( «e.expr» ) «ELSE» «e.^var.compile» «ENDIF»'''	
+			default: '''«IF e.expr !== null»(«e.expr») «ELSE»«e.^var.compile»«ENDIF»'''	
 		}
 	}
 	
@@ -196,12 +215,40 @@ class MGPLGenerator extends AbstractGenerator {
 //	
 	
 	def compile(Var ^var){ //Todo funktioniert irgendwie nicht
-		switch ^var{
-			Prog:'''«(^var as Programm).name»'''
-			IntDecl:'''«^var.name»'''
-			ObjDecl:'''«^var.name»'''
-			AnimationParameter:'''«(^var as AnimationParameter).name»'''
-			Animation:'''«(^var as Animation).name»'''
+		if(^var instanceof ArrayElementSelect){
+			return '''«compile(^var as ArrayElementSelect)»'''
+		} else if(^var instanceof MemberSelect){
+			return '''«compile(^var as MemberSelect)»'''
+		} else {
+			var varName = ^var.name
+			switch varName{
+				Programm:'''«varName.name»'''
+				IntDecl:'''«varName.name»'''
+				ObjDecl:'''«varName.name»'''
+				ObjArrayDecl:'''«varName.name»'''
+				AnimationParameter:'''«varName.name»'''
+				Animation:'''«varName.name»'''
+				default:'''«varName.eClass»'''
+			}
 		}
+	}
+	
+	def compile(ArrayElementSelect arr){
+		'''«compile(arr.variable)»[«compile(arr.index)»]'''
+	}
+	
+	def compile(MemberSelect mem){
+	'''«compile(mem.variable)».«mem.memberName»'''
+	}
+	
+	def createDataClasses(){
+		'''
+		public class GeometricObject {
+			int x;
+			int y;
+			boolean visible;
+			
+		}
+		'''
 	}
 }

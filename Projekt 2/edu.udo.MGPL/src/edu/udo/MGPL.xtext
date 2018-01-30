@@ -76,7 +76,7 @@ AssStmt returns Declaration:
 
 
 Var: 
-	name = [Declarations]
+	 name = [Declarations]
 	 ({ArrayElementSelect.variable = current} '[' index=Expr ']')?
 	 ({MemberSelect.variable = current} '.' memberName=ID)? 
 	//( '[' expr=Expr ']'('.' memberName=ID)?)? | objectName=[Declaration] '.' memberName=ID  
