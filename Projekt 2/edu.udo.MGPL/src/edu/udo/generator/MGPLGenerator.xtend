@@ -249,9 +249,11 @@ class MGPLGenerator extends AbstractGenerator {
 	«stmt.^var.compile» = «stmt.expr.compile»;'''
 	
 	def compile(ForStatement stmt)'''
-		for(«(stmt.loopInit as AssignmentStatement).compile» «(stmt.loopCondition as Expression).compile»; «(stmt.loopIncrement as AssignmentStatement).compile»){
-			«(stmt.stmtBlock as Statements).compile»
-		}'''
+	«(stmt.loopInit as AssignmentStatement).compile» //loopInit
+	while(«(stmt.loopCondition as Expression).compile»){ //loopCondition
+		«(stmt.stmtBlock as Statements).compile»
+		«(stmt.loopIncrement as AssignmentStatement).compile» //loopIncrement
+	}'''
 	
 	def compile(Animation anim)'''
 	private class «anim.name.toFirstUpper» extends Animation {
@@ -270,7 +272,7 @@ class MGPLGenerator extends AbstractGenerator {
 			Mult : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
 			Negation : '''«e.op»«e.exprAtom.compile»'''
 			IntLiteral : '''«e.value»'''
-			Touches : '''touches(«e.left.compile», «e.right.compile»''' //TODO https://docs.oracle.com/javafx/2/api/javafx/scene/shape/Shape.html#intersect%28javafx.scene.shape.Shape,%20javafx.scene.shape.Shape%29
+			Touches : '''touches(«e.left.compile», «e.right.compile») '''
 			default: '''«IF e.expr !== null»(«e.expr») «ELSE»«e.^var.compile»«ENDIF»'''	
 		}
 	}
