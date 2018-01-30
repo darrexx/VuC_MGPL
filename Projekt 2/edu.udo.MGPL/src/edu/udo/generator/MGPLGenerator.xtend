@@ -54,6 +54,7 @@ class MGPLGenerator extends AbstractGenerator {
 	def compile(Programm prog) '''
 	import java.util.*;
 	//JavaFX
+	import javafx.animation.Timeline;
 	import javafx.application.Application;
 	import javafx.scene.Scene;
 	import javafx.scene.canvas.Canvas;
@@ -61,7 +62,7 @@ class MGPLGenerator extends AbstractGenerator {
 	import javafx.scene.layout.StackPane;
 	import javafx.scene.paint.Color;
 	import javafx.stage.Stage;
-	import javafx.scene.shape.Shape
+	import javafx.scene.shape.Shape;
 	import javafx.util.Duration;
 	//End JavaFX
 	
