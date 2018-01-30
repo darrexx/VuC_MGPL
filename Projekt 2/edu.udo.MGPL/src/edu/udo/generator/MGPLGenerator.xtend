@@ -222,22 +222,23 @@ class MGPLGenerator extends AbstractGenerator {
 	public «decl.type»[] «decl.name» = new «decl.type»[«decl.size»];
 	'''
 	
-	def compile(ObjArrayDecl decl) '''
-	public «decl.type.toFirstUpper»[] «decl.name» = new «decl.type.toFirstUpper»[«decl.size»];
-	«decl.type.toLowerCase»s.addAll(«decl.name»);
-	
-	'''
+	def compile(ObjArrayDecl decl){
+		initstmts.add('''Collections.addAll(«decl.type.toLowerCase»s, «decl.name»);''');
+		return '''
+			public «decl.type.toFirstUpper»[] «decl.name» = new «decl.type.toFirstUpper»[«decl.size»];
+			'''
+	} 
 	
 	def compile(ObjDecl decl){
 		if(decl.attrAssList !== null){
 			(decl.attrAssList as AttributeAssignments).compile(decl.name)
+			initstmts.add('''«decl.type.toLowerCase»s.add(«decl.name»);''')
 		}
 		return '''
-	public «decl.type.toFirstUpper» «decl.name» = new «decl.type.toFirstUpper»();
-	«IF decl.attrAssList !== null»«(decl.attrAssList as AttributeAssignments).compile(decl.name)»«ENDIF»
-	«decl.type.toLowerCase»s.add(«decl.name»);
+			public «decl.type.toFirstUpper» «decl.name» = new «decl.type.toFirstUpper»();
+			«IF decl.attrAssList !== null»«(decl.attrAssList as AttributeAssignments).compile(decl.name)»«ENDIF»
 
-	'''
+			'''
 	} 
 	
 	def compile(AttributeAssignments list, String objName){
