@@ -52,9 +52,17 @@ class MGPLGenerator extends AbstractGenerator {
 	// canvas.setFocusTraversable(true); muss gesetzt werden damit tastenanschläge entgegengenommen werden
 	
 	def compile(Programm prog) '''
-	import java.util.ArrayList;
+	import java.util.*;
 	//JavaFX
 	import javafx.application.Application;
+	import javafx.scene.Scene;
+	import javafx.scene.canvas.Canvas;
+	import javafx.scene.canvas.GraphicsContext;
+	import javafx.scene.layout.StackPane;
+	import javafx.scene.paint.Color;
+	import javafx.stage.Stage;
+	import javafx.scene.shape.Shape
+	import javafx.util.Duration;
 	//End JavaFX
 	
 	public class «prog.name.toFirstUpper» extends Application{
@@ -70,6 +78,7 @@ class MGPLGenerator extends AbstractGenerator {
 			public int y; 
 			public boolean visible;
 			public Animation animation_block;
+			public abstract Shape toShape();
 		}
 		public class Circle extends AnimatableObject{
 			public int radius;
@@ -137,6 +146,16 @@ class MGPLGenerator extends AbstractGenerator {
 			}
 		}
 		//End JavaFX
+		
+		//touches
+			public static boolean touches(AnimatableObject a, AnimatableObject b){
+				//TODO: Test JavaFX.Shapes.intersect
+				Shape intersection = Shape.intersect(a.toShape(), b.toShape());
+				if (intersection.getBoundsInLocal().getWidth() != -1) 
+				     return true; 
+				return false;
+			}
+		//end touches
 	}
 	'''
 	
@@ -232,7 +251,7 @@ class MGPLGenerator extends AbstractGenerator {
 			Mult : '''«e.left.compile»«IF e.right !== null» «e.op» «e.right.compile»«ENDIF»'''
 			Negation : '''«e.op»«e.exprAtom.compile»'''
 			IntLiteral : '''«e.value»'''
-			Touches : '''touches''' //TODO bin ich mir gerade nicht sicher, was Touches in MGPL bedeutet
+			Touches : '''touches(«e.left.compile», «e.right.compile»''' //TODO https://docs.oracle.com/javafx/2/api/javafx/scene/shape/Shape.html#intersect%28javafx.scene.shape.Shape,%20javafx.scene.shape.Shape%29
 			default: '''«IF e.expr !== null»(«e.expr») «ELSE»«e.^var.compile»«ENDIF»'''	
 		}
 	}
