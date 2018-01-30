@@ -58,10 +58,13 @@ class MGPLGenerator extends AbstractGenerator {
 	//End JavaFX
 	
 	public class «prog.name.toFirstUpper» extends Application{
+		public static void main(String[] args) {
+		        launch(args);
+		}
 		public abstract class Animation {
 			public abstract void animate(AnimatableObject anim);
 		}
-		
+				
 		public abstract class AnimatableObject {
 			public int x;
 			public int y; 
@@ -116,6 +119,7 @@ class MGPLGenerator extends AbstractGenerator {
 					«ENDFOR»
 				}
 			};
+			canvas.setFocusTraversable(true);
 			stage.setScene(new Scene(new StackPane(canvas)));
 			stage.show();
 			tl.play();
