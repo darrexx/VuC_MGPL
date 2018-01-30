@@ -52,7 +52,12 @@ class MGPLGenerator extends AbstractGenerator {
 	// canvas.setFocusTraversable(true); muss gesetzt werden damit tastenanschläge entgegengenommen werden
 	
 	def compile(Programm prog) '''
-	public class «prog.name.toFirstUpper» {
+	import java.util.ArrayList;
+	//JavaFX
+	import javafx.application.Application;
+	//End JavaFX
+	
+	public class «prog.name.toFirstUpper» extends Application{
 		public abstract class Animation {
 			public abstract void animate(AnimatableObject anim);
 		}
@@ -61,6 +66,7 @@ class MGPLGenerator extends AbstractGenerator {
 			public int x;
 			public int y; 
 			public boolean visible;
+			public Animation animation_block;
 		}
 		public class Circle extends AnimatableObject{
 			public int radius;
@@ -69,41 +75,64 @@ class MGPLGenerator extends AbstractGenerator {
 			public int height;
 			public int width;
 		}
-		public  class Triangle extends AnimatableObject{
+		public class Triangle extends AnimatableObject{
 			public int height;
 			public int width;
 		}
-		
 		//List of animatable Objects
-		List<Circle> circles = new List<Circle>();
-		List<Rectangle> rectangles = new List<Rectangle>();
-		List<Triangle> triangles = new List<Triangle>();	
+		List<Circle> circles = new ArrayList<Circle>();
+		List<Rectangle> rectangles = new ArrayList<Rectangle>();
+		List<Triangle> triangles = new ArrayList<Triangle>();	
 		
 		//Declarations
 		«FOR d:prog.decl»
 		«d.compile»
 		«ENDFOR»
 		//Declarations end
-		
 		//Statements
-		«(prog.stmtBlock as Statements).compile»
+		public void init(){
+			«(prog.stmtBlock as Statements).compile»
+		}
 		//Statements end
 		
-		//Block
+		//Animations 
 		«FOR d:prog.block.filter[x | x instanceof Animation]»
 			«compile(d as Animation)»
-		«ENDFOR»
+		«ENDFOR»		
+		//Animations end
 		
-		canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				«FOR d:prog.block.filter[x | x instanceof Event]»
-					«compile(d as Event)»
-				«ENDFOR»
+			
+		//JavaFX
+		public void start(Stage stage){
+			Canvas canvas = new Canvas(width, height);
+			GraphicsContext gc = canvas.getGraphicsContext2D();
+			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run(gc)));
+			tl.setCycleCount(Timeline.INDEFINITE);
+			canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent event) {
+					«FOR d:prog.block.filter[x | x instanceof Event]»
+						«compile(d as Event)»
+					«ENDFOR»
+				}
+			};
+			stage.setScene(new Scene(new StackPane(canvas)));
+			stage.show();
+			tl.play();
+		}
+		
+		private void run(){
+			for(Circle circle : circles){
+				circle.animation_block.animate(circle);
 			}
-		};
-		
-		//Block end
+			for(Rectangle rectangle : rectangles){
+				rectangle.animation_block.animate(rectangle);
+			}
+			for(Triangle triangle : triangles){
+				triangle.animation_block.animate(triangle);
+			}
+		}
+		//End JavaFX
 	}
 	'''
 	
