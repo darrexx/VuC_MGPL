@@ -53,9 +53,31 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(Programm prog) '''
 	public class «prog.name.toFirstUpper» {
-		private abstract class Animation {
-			public abstract void animate()
+		public abstract class Animation {
+			public abstract void animate(AnimatableObject anim);
 		}
+		
+		public abstract class AnimatableObject {
+			public int x;
+			public int y; 
+			public boolean visible;
+		}
+		public class Circle extends AnimatableObject{
+			public int radius;
+		}
+		public class Rectangle extends AnimatableObject{
+			public int height;
+			public int width;
+		}
+		public  class Triangle extends AnimatableObject{
+			public int height;
+			public int width;
+		}
+		
+		//List of animatable Objects
+		List<Circle> circles = new List<Circle>();
+		List<Rectangle> rectangles = new List<Rectangle>();
+		List<Triangle> triangles = new List<Triangle>();	
 		
 		//Declarations
 		«FOR d:prog.decl»
@@ -110,11 +132,14 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(ObjArrayDecl decl) '''
 	public «decl.type.toFirstUpper»[] «decl.name» = new «decl.type.toFirstUpper»[«decl.size»];
+	«decl.type.toLowerCase»s.addAll(«decl.name»);
+	
 	'''
 	
 	def compile(ObjDecl decl) '''
 	public «decl.type.toFirstUpper» «decl.name» = new «decl.type.toFirstUpper»();
 	«IF decl.attrAssList !== null»«(decl.attrAssList as AttributeAssignments).compile(decl.name)»«ENDIF»
+	«decl.type.toLowerCase»s.add(«decl.name»);
 
 	'''
 	
@@ -124,7 +149,7 @@ class MGPLGenerator extends AbstractGenerator {
 	«ENDFOR»'''
 	
 	def compile(AttributeAssignment ass, String objName)'''
-	«objName».set«ass.name.toFirstUpper»(«ass.expr.compile»);'''
+	«objName».«ass.name» = «ass.expr.compile»;'''
 	
 	
 	def compile(Statements stmts)'''
@@ -243,7 +268,14 @@ class MGPLGenerator extends AbstractGenerator {
 	}
 	
 	def compile(MemberSelect mem){
-	'''«compile(mem.variable)».«mem.memberName»'''
+		var fixedMemberName = ""
+		switch mem.memberName{
+			case "w": fixedMemberName = "width"
+			case "h": fixedMemberName = "height"
+			case "r": fixedMemberName = "radius"
+			default: fixedMemberName = mem.memberName
+		}
+	'''«compile(mem.variable)».«fixedMemberName»'''
 	}
 	
 	def createDataClasses(){
