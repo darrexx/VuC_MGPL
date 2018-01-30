@@ -85,10 +85,26 @@ class MGPLGenerator extends AbstractGenerator {
 			public abstract Shape toShape();
 		}
 		public class Circle extends AnimatableObject{
+			public Shape toShape(){
+				retVal = new javafx.scene.shape.Circle(this.x, this.y, this.radius);
+				return retVal;
+			}
 		}
 		public class Rectangle extends AnimatableObject{
+			public Shape toShape(){
+				retVal = new javafx.scene.shape.Rectangle(this.x, this.y, this.width, this.height);
+				return retVal; 
+			}
 		}
 		public class Triangle extends AnimatableObject{
+			public Shape toShape(){
+				Polygon polygon = new Polygon();
+				polygon.getPoints().addAll(new Double[]{
+					x, y,
+					x+width, y,
+					x+(width/2), y+height });
+				return polygon;
+			}
 		}
 		//List of animatable Objects
 		List<Circle> circles = new ArrayList<Circle>();
@@ -126,7 +142,7 @@ class MGPLGenerator extends AbstractGenerator {
 						«compile(d as Event)»
 					«ENDFOR»
 				}
-			};
+			});
 			canvas.setFocusTraversable(true);
 			stage.setScene(new Scene(new StackPane(canvas)));
 			stage.show();
