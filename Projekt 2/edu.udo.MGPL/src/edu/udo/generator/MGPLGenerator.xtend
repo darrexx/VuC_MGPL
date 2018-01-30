@@ -257,7 +257,7 @@ class MGPLGenerator extends AbstractGenerator {
 				ObjDecl:'''«varName.name»'''
 				ObjArrayDecl:'''«varName.name»'''
 				AnimationParameter:'''«varName.name»'''
-				Animation:'''«varName.name»'''
+				Animation:'''new «varName.name.toFirstUpper»()'''
 				default:'''«varName.eClass»'''
 			}
 		}
