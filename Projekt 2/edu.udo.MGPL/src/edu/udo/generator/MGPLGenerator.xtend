@@ -346,7 +346,7 @@ class MGPLGenerator extends AbstractGenerator {
 			case "r": fixedMemberName = "radius"
 			default: fixedMemberName = mem.memberName
 		}
-	'''«compile(mem.variable)».«fixedMemberName»'''
+	'''«IF mem.variable.name instanceof Programm»«ELSE»«compile(mem.variable)».«ENDIF»«fixedMemberName»'''
 	}
 	
 	def createDataClasses(){
