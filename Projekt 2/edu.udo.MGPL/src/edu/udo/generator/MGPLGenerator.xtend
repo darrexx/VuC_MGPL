@@ -25,7 +25,6 @@ import edu.udo.mGPL.Negation
 import edu.udo.mGPL.ObjArrayDecl
 import edu.udo.mGPL.ObjDecl
 import edu.udo.mGPL.Or
-import edu.udo.mGPL.Prog
 import edu.udo.mGPL.Programm
 import edu.udo.mGPL.Rel
 import edu.udo.mGPL.Statements
@@ -54,6 +53,10 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	def compile(Programm prog) '''
 	public class «prog.name.toFirstUpper» {
+		private abstract class Animation {
+			public abstract void animate()
+		}
+		
 		//Declarations
 		«FOR d:prog.decl»
 		«d.compile»
@@ -153,8 +156,10 @@ class MGPLGenerator extends AbstractGenerator {
 		}'''
 	
 	def compile(Animation anim)'''
-	public void animation«anim.name.toFirstUpper»(«(anim.param as AnimationParameter).compile»){
-		«(anim.stmtBlock as Statements).compile»
+	private class «anim.name.toFirstUpper» extends Animation {
+		public void animate(«(anim.param as AnimationParameter).compile»){
+			«(anim.stmtBlock as Statements).compile»
+		}
 	}
 	'''
 	
