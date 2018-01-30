@@ -34,6 +34,8 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import java.util.ArrayList
+import java.util.List
 
 /**
  * Generates code from your model files on save.
@@ -42,7 +44,10 @@ import org.eclipse.xtext.generator.IGeneratorContext
  */
 class MGPLGenerator extends AbstractGenerator {
 
+	List<String> initstmts;
+
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
+		initstmts = new ArrayList<String>();
 		//fsa.generateFile('mgpl_generated.java',compile(resource.allContents.toIterable.findFirst[typeof(Programm)])
 		for(e: resource.allContents.toIterable.filter(typeof(Programm)))
 		{
@@ -128,6 +133,7 @@ class MGPLGenerator extends AbstractGenerator {
 		//Declarations end
 		//Statements
 		public void init(){
+			«initstmts.read»
 			«(prog.stmtBlock as Statements).compile»
 		}
 		//Statements end
@@ -184,6 +190,15 @@ class MGPLGenerator extends AbstractGenerator {
 	}
 	'''
 	
+	def String read(List<String> strings){
+		val builder = new StringBuilder();
+		for(String string : strings){
+			builder.append(string);
+			builder.append(System.getProperty("line.separator"));
+		}
+		return builder.toString();
+	}
+	
 	def compile(Declaration decl) '''
 	«IF decl instanceof IntDecl»
 	«compile(decl as IntDecl)»
@@ -213,20 +228,26 @@ class MGPLGenerator extends AbstractGenerator {
 	
 	'''
 	
-	def compile(ObjDecl decl) '''
+	def compile(ObjDecl decl){
+		if(decl.attrAssList !== null){
+			(decl.attrAssList as AttributeAssignments).compile(decl.name)
+		}
+		return '''
 	public «decl.type.toFirstUpper» «decl.name» = new «decl.type.toFirstUpper»();
 	«IF decl.attrAssList !== null»«(decl.attrAssList as AttributeAssignments).compile(decl.name)»«ENDIF»
 	«decl.type.toLowerCase»s.add(«decl.name»);
 
 	'''
+	} 
 	
-	def compile(AttributeAssignments list, String objName) '''
-	«FOR a:list.assignments»
-	«(a as AttributeAssignment).compile(objName)»
-	«ENDFOR»'''
-	
-	def compile(AttributeAssignment ass, String objName)'''
-	«objName».«ass.name» = «ass.expr.compile»;'''
+	def compile(AttributeAssignments list, String objName){
+		for(a : list.assignments){
+			(a as AttributeAssignment).compile(objName)
+		}
+	}
+	def compile(AttributeAssignment ass, String objName){
+		initstmts.add('''«objName».«ass.name» = «ass.expr.compile»;''');
+	}
 	
 	
 	def compile(Statements stmts)'''
