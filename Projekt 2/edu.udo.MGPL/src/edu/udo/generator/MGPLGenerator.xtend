@@ -281,7 +281,7 @@ class MGPLGenerator extends AbstractGenerator {
 	}«ENDIF»'''
 	
 	def compile(AssignmentStatement stmt)'''
-	«stmt.^var.compile» = «stmt.expr.compile»«IF (stmt.^var instanceof MemberSelect) && (stmt.^var as MemberSelect).memberName == "visible"» != 0«ENDIF»;'''
+	«stmt.^var.compile» = «IF (stmt.^var instanceof MemberSelect) && (stmt.^var as MemberSelect).memberName == "visible"»«IF (stmt.expr as IntLiteral).value == 0»false«ENDIF»«IF (stmt.expr as IntLiteral).value == 1»true«ENDIF»«ELSE»«stmt.expr.compile»«ENDIF»;'''
 	
 	def compile(ForStatement stmt)'''
 	«(stmt.loopInit as AssignmentStatement).compile» //loopInit
