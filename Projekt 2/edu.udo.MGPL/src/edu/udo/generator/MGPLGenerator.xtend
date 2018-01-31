@@ -149,7 +149,7 @@ class MGPLGenerator extends AbstractGenerator {
 		public void start(Stage stage){
 			Canvas canvas = new Canvas(width, height);
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run()));
+			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run(gc)));
 			tl.setCycleCount(Timeline.INDEFINITE);
 			canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				@Override
@@ -165,7 +165,7 @@ class MGPLGenerator extends AbstractGenerator {
 			tl.play();
 		}
 		
-		private void run(){
+		private void run(GraphicsContext gc){
 			for(Circle circle : circles){
 				if(circle.animation_block != null){
 					circle.animation_block.animate(circle);
