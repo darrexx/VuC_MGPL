@@ -77,6 +77,11 @@ class MGPLGenerator extends AbstractGenerator {
 	import javafx.util.Duration;
 	//End JavaFX
 	
+	// Generiert durch 
+	// Nils Bergmann 165409
+	// Hendrik Schröder 165789
+	// Timo Walter 166042
+	
 	public class «prog.name.toFirstUpper» extends Application{
 		public static void main(String[] args) {
 		        launch(args);

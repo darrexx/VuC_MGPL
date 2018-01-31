@@ -1,6 +1,10 @@
 grammar edu.udo.MGPL with org.eclipse.xtext.common.Terminals
 
 generate mGPL "http://www.udo.edu/MGPL"
+ 
+// Nils Bergmann 165409
+// Hendrik Schröder 165789
+// Timo Walter 166042
 
 Prog:
 	{Programm} 'game' name=ID '(' attrAssList=AttrAssList? ')' decl+=Decl* stmtBlock=StmtBlock block+=Block*
