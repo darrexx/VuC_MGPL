@@ -54,7 +54,6 @@ class MGPLGenerator extends AbstractGenerator {
 			fsa.generateFile(e.name + ".java", e.compile())
 		}
 	}
-	// canvas.setFocusTraversable(true); muss gesetzt werden damit tastenanschläge entgegengenommen werden
 	
 	def compile(Programm prog) '''
 	import java.util.*;
@@ -148,6 +147,7 @@ class MGPLGenerator extends AbstractGenerator {
 		//JavaFX
 		public void start(Stage stage){
 			Canvas canvas = new Canvas(width, height);
+			canvas.setFocusTraversable(true);
 			GraphicsContext gc = canvas.getGraphicsContext2D();
 			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run(gc)));
 			tl.setCycleCount(Timeline.INDEFINITE);
@@ -166,20 +166,32 @@ class MGPLGenerator extends AbstractGenerator {
 		}
 		
 		private void run(GraphicsContext gc){
+			gc.clearRect(0, 0, width, height);
 			for(Circle circle : circles){
 				if(circle.animation_block != null){
 					circle.animation_block.animate(circle);
 				}
+				gc.fillOval(circle.x, circle.y, circle.radius*2, circle.radius*2);
 			}
 			for(Rectangle rectangle : rectangles){
 				if(rectangle.animation_block != null){
 					rectangle.animation_block.animate(rectangle);
 				}
+				gc.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 			}
 			for(Triangle triangle : triangles){
 				if(triangle.animation_block != null){
 					triangle.animation_block.animate(triangle);
 				}
+				double[] pointsY = new double[]{
+						(double)triangle.y,
+						(double)triangle.y,
+						(double)triangle.y+triangle.height };
+				double[] pointsX = new double[]{
+						(double)triangle.x,
+						(double)triangle.x+triangle.width,
+						(double)triangle.x+(triangle.width/2)};
+				gc.fillPolygon(pointsX, pointsY, pointsX.length);
 			}
 		}
 		//End JavaFX
@@ -256,7 +268,14 @@ class MGPLGenerator extends AbstractGenerator {
 		}
 	}
 	def compile(AttributeAssignment ass, String objName){
-		initstmts.add('''«objName».«ass.name» = «ass.expr.compile»;''');
+		var fixedMemberName = ""
+		switch ass.name{
+			case "w": fixedMemberName = "width"
+			case "h": fixedMemberName = "height"
+			case "r": fixedMemberName = "radius"
+			default: fixedMemberName = ass.name
+		}
+		initstmts.add('''«objName».«fixedMemberName» = «ass.expr.compile»;''');
 	}
 	
 	
