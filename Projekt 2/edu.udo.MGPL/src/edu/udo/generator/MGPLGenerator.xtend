@@ -93,7 +93,7 @@ class MGPLGenerator extends AbstractGenerator {
 		public abstract class AnimatableObject {
 			public int x;
 			public int y;
-			public boolean visible;
+			public boolean visible = true;
 			public Animation animation_block;
 			public int height;
 			public int width;
@@ -154,7 +154,7 @@ class MGPLGenerator extends AbstractGenerator {
 			Canvas canvas = new Canvas(width, height);
 			canvas.setFocusTraversable(true);
 			GraphicsContext gc = canvas.getGraphicsContext2D();
-			Timeline tl = new Timeline(new KeyFrame(Duration.millis(10), e -> run(gc)));
+			Timeline tl = new Timeline(new KeyFrame(Duration.millis(102-speed), e -> run(gc)));
 			tl.setCycleCount(Timeline.INDEFINITE);
 			canvas.setOnKeyPressed(new EventHandler<KeyEvent>() {
 				@Override
@@ -176,13 +176,17 @@ class MGPLGenerator extends AbstractGenerator {
 				if(circle.animation_block != null){
 					circle.animation_block.animate(circle);
 				}
-				gc.fillOval(circle.x, circle.y, circle.radius*2, circle.radius*2);
+				if(circle.visible){
+					gc.fillOval(circle.x, circle.y, circle.radius*2, circle.radius*2);
+				}
 			}
 			for(Rectangle rectangle : rectangles){
 				if(rectangle.animation_block != null){
 					rectangle.animation_block.animate(rectangle);
 				}
-				gc.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+				if(rectangle.visible){
+					gc.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+				}
 			}
 			for(Triangle triangle : triangles){
 				if(triangle.animation_block != null){
@@ -196,7 +200,9 @@ class MGPLGenerator extends AbstractGenerator {
 						(double)triangle.x,
 						(double)triangle.x+triangle.width,
 						(double)triangle.x+(triangle.width/2)};
-				gc.fillPolygon(pointsX, pointsY, pointsX.length);
+				if(triangle.visible){
+					gc.fillPolygon(pointsX, pointsY, pointsX.length);
+				}
 			}
 		}
 		//End JavaFX
