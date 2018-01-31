@@ -15,6 +15,7 @@ import java.util.HashSet
 import java.util.Set
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtext.validation.Check
+import edu.udo.mGPL.AttributeAssignment
 
 /**
  * This class contains custom validation rules. 
@@ -27,16 +28,7 @@ class MGPLValidator extends AbstractMGPLValidator {
 	public static final val CIRLCE_ATTRIBUTE_NAMES = #{"animation_block", "radius", "visible", "x", "y", "r"};
 	public static final val RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES = #{"animation_block", "height", "width", "visible", "x", "y","h", "w"};
 	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					MGPLPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
+	public static val INVALID_NAME = 'invalidName'
 
 //	@Check
 //	def checkExpressions(Expression expression){
@@ -48,47 +40,47 @@ class MGPLValidator extends AbstractMGPLValidator {
 //			default: {}
 //		}
 //	}
-//	
-//	@Check
-//	def checkGameAttributes(Programm programm){
-//		if(programm.attrAssList !== null){
-//			val attributeAssignments = programm.attrAssList as AttributeAssignments;
-//			val attributes = attributeAssignments.assignments;
-//			if(!checkParameters(attributes, GAME_ATTRIBUTE_NAMES)){
-//				error('Only specific Attributes are allowed', MGPLPackage.Literals.PROGRAMM__ATTR_ASS_LIST)
-//			}
-//		}
-//	}
-//	
-//	@Check
-//	def checkObjDeclAttributes(ObjDecl decl){
-//		if(decl.attrAssList !== null){
-//			val attributeAssignments = decl.attrAssList as AttributeAssignments;
-//			val attributes = attributeAssignments.assignments;
-//			if(decl.type == "circle"){
-//				if(!checkParameters(attributes, CIRLCE_ATTRIBUTE_NAMES)){
-//					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
-//				}
-//			}
-//			else{
-//				if(!checkParameters(attributes, RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES)){
-//					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
-//				}
-//			}
-//			
-//		}
-//	}
-//	
-//	def checkParameters(EList<AttrAss> parameterNames, Set<String> validStrings){
-//		var Set<String> validNames = new HashSet(validStrings);
-//		for(parameter : parameterNames){
-//			if(!validNames.contains(parameter.name)){
-//				return false;
-//			}
-//			validNames.remove(parameter.name);
-//		}
-//		return true;
-//	}
-//	
+	
+	@Check
+	def checkGameAttributes(Programm programm){
+		if(programm.attrAssList !== null){
+			val attributeAssignments = programm.attrAssList as AttributeAssignments;
+			val attributes = attributeAssignments.assignments;
+			if(!checkParameters(attributes, GAME_ATTRIBUTE_NAMES)){
+				error('Only specific Attributes are allowed', MGPLPackage.Literals.PROGRAMM__ATTR_ASS_LIST)
+			}
+		}
+	}
+	
+	@Check
+	def checkObjDeclAttributes(ObjDecl decl){
+		if(decl.attrAssList !== null){
+			val attributeAssignments = decl.attrAssList as AttributeAssignments;
+			val attributes = attributeAssignments.assignments;
+			if(decl.type == "circle"){
+				if(!checkParameters(attributes, CIRLCE_ATTRIBUTE_NAMES)){
+					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+				}
+			}
+			else{
+				if(!checkParameters(attributes, RECTANGLE_TRIANGLE_ATTRIBUTE_NAMES)){
+					error('Only specific Attributes are allowed', MGPLPackage.Literals.OBJ_DECL__ATTR_ASS_LIST)
+				}
+			}
+			
+		}
+	}
+	
+	def checkParameters(EList<AttrAss> parameterNames, Set<String> validStrings){
+		var Set<String> validNames = new HashSet(validStrings);
+		for(parameter : parameterNames){
+			if(!validNames.contains((parameter as AttributeAssignment).name)){
+				return false;
+			}
+			validNames.remove((parameter as AttributeAssignment).name);
+		}
+		return true;
+	}
+	
 	
 }
