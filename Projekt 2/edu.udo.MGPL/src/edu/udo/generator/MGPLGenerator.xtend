@@ -167,13 +167,19 @@ class MGPLGenerator extends AbstractGenerator {
 		
 		private void run(){
 			for(Circle circle : circles){
-				circle.animation_block.animate(circle);
+				if(circle.animation_block != null){
+					circle.animation_block.animate(circle);
+				}
 			}
 			for(Rectangle rectangle : rectangles){
-				rectangle.animation_block.animate(rectangle);
+				if(rectangle.animation_block != null){
+					rectangle.animation_block.animate(rectangle);
+				}
 			}
 			for(Triangle triangle : triangles){
-				triangle.animation_block.animate(triangle);
+				if(triangle.animation_block != null){
+					triangle.animation_block.animate(triangle);
+				}
 			}
 		}
 		//End JavaFX
